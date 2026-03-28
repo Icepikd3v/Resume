@@ -78,11 +78,10 @@ export function PortraitShowcase({ portraits, ownerName }: Props) {
           onClick={() => openLightbox(activeIndex)}
           aria-label={`Enlarge ${active.label} photo`}
         >
-          <div className="photo-frame portrait-main-frame">
+          <div className="photo-frame portrait-main-frame profile-circle-frame">
             <Image src={active.src} alt={`${ownerName} - ${active.label}`} fill sizes="(max-width: 720px) 100vw, 360px" />
           </div>
         </button>
-        <p className="portrait-main-label">{active.label}</p>
       </div>
 
       {lightboxIndex !== null ? (
@@ -105,7 +104,6 @@ export function PortraitShowcase({ portraits, ownerName }: Props) {
             <button type="button" className="lightbox-arrow right" onClick={showNext} aria-label="Next image">
               →
             </button>
-            <p className="lightbox-label">{portraits[lightboxIndex].label}</p>
           </div>
         </div>
       ) : null}

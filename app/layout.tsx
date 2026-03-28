@@ -23,6 +23,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={`${headline.variable} ${body.variable}`}>
         <div className="site-bg" aria-hidden="true" />
+        <div className="site-bg-glow site-bg-glow-a" aria-hidden="true" />
+        <div className="site-bg-glow site-bg-glow-b" aria-hidden="true" />
+        <div className="site-bg-noise" aria-hidden="true" />
         <SiteHeader />
         <main>{children}</main>
       </body>

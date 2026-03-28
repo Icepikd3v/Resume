@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PortraitShowcase } from "@/components/portrait-showcase";
+import { StudioAudioPlayer } from "@/components/studio-audio-player";
 import { getSiteContent } from "@/lib/content-store";
 
 export const dynamic = "force-dynamic";
@@ -42,48 +43,58 @@ export default async function HomePage() {
 
   return (
     <div className="page-shell">
-      <section className="top-split hero">
-        <section id="name" className="panel split-left">
-          <p className="eyebrow">Name</p>
-          <h1>{content.name}</h1>
-          <p className="name-alias">{content.alias}</p>
-          <p className="intro">{content.headline}</p>
-          <p className="section-lead">
-            LinkedIn/Facebook-style main image. Click to enlarge, then use arrows to view your other photos.
-          </p>
-          <PortraitShowcase portraits={content.portraits} ownerName={content.name} />
-        </section>
+      <section className="hero hero-pro hero-layout">
+        <div className="top-split profile-media-row">
+          <section className="panel split-left profile-pic-panel">
+            <PortraitShowcase portraits={content.portraits} ownerName={content.name} />
+            <h1>{content.name}</h1>
+            <p className="name-alias">{content.alias}</p>
+            <p className="intro">{content.headline}</p>
+            <div className="hero-quick-chips" aria-label="Professional highlights">
+              <span className="chip">Open to Work</span>
+              <span className="chip">Remote + On-Site</span>
+              <span className="chip">MERN + Automation</span>
+            </div>
+          </section>
 
-        <aside className="split-right">
-          <article className="panel side-card contact-compact-card">
-            <h3>Connect</h3>
-            <p className="muted">Professional links and direct contact.</p>
-            <div className="icon-links" aria-label="Social links">
-              <a href={content.socialLinks.github} target="_blank" rel="noreferrer" className="icon-link-pill">
-                <GitHubIcon />
-                <span>GitHub</span>
-              </a>
-              <a href={content.socialLinks.linkedin} target="_blank" rel="noreferrer" className="icon-link-pill">
-                <LinkedInIcon />
-                <span>LinkedIn</span>
-              </a>
-            </div>
-            <div className="contact-list-compact">
-              {content.contacts.map((email) => (
-                <p key={email} className="contact-row">
-                  <a href={`mailto:${email}`}>{email}</a>
-                </p>
-              ))}
-            </div>
-          </article>
-        </aside>
+          <aside className="split-right">
+            <article className="panel side-card contact-compact-card">
+              <h3>Connect</h3>
+              <p className="muted">Professional links and direct contact.</p>
+              <div className="icon-links" aria-label="Social links">
+                <a href={content.socialLinks.github} target="_blank" rel="noreferrer" className="icon-link-pill">
+                  <GitHubIcon />
+                  <span>GitHub</span>
+                </a>
+                <a href={content.socialLinks.linkedin} target="_blank" rel="noreferrer" className="icon-link-pill">
+                  <LinkedInIcon />
+                  <span>LinkedIn</span>
+                </a>
+              </div>
+              <div className="contact-list-compact">
+                {content.contacts.map((email) => (
+                  <p key={email} className="contact-row">
+                    <a href={`mailto:${email}`}>{email}</a>
+                  </p>
+                ))}
+              </div>
+            </article>
+          </aside>
+        </div>
+
+        <article className="panel side-card player-card" aria-label="Background player module">
+          <p className="eyebrow">Studio Player</p>
+          <h3>Chill Instrumental Audio</h3>
+          <p className="muted">Compact audio-only player with a non-pop ambient tracklist.</p>
+          <StudioAudioPlayer />
+        </article>
       </section>
 
       <section id="about" className="panel">
         <h2>About Me</h2>
         <p># Hi, I&apos;m Samuel Farmer (aka icepikd3v)</p>
         <p>
-          Full Stack Web Developer | Frontend Specialist | 3D Print & Hardware Enthusiast
+          Full-Stack Developer | Full Sail University Alumni
           <br />
           B.S. in Web Design & Development - Full Sail University, Class of 2025
           <br />
