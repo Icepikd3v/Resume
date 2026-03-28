@@ -1,63 +1,39 @@
-# Personal Resume Portfolio
+# Resume Site
 
-A clean, modern single-page portfolio template for showcasing your skills, projects, and experience to employers.
+Fresh Next.js resume portfolio starter for Samuel Farmer (`icepikd3v`).
 
-## Project Structure
+## Stack
 
-- `index.html` - page structure and portfolio sections
-- `styles.css` - custom visual design and responsive layout
-- `script.js` - mobile menu behavior, reveal animation, dynamic footer year
-- `snippets/` - language showcase files (Python, Java, Ruby, SQL, JavaScript, CSS)
+- Next.js (App Router)
+- React
+- TypeScript
 
-## Customize Your Information
-
-Update these placeholders in `index.html`:
-
-- `Your Name`
-- headline + About paragraph
-- skill categories and tools
-- project titles/descriptions/links
-- education/experience timeline
-- contact email, LinkedIn, GitHub
-
-## Run Locally
-
-This is a static website, so you can open `index.html` directly in your browser.
-
-Optional local server:
+## Run
 
 ```bash
-python3 -m http.server 8080
+npm install
+npm run dev
 ```
 
-Then visit `http://localhost:8080`.
+## Dashboard (No Code Edits Needed)
 
-## Deploy to a Live Domain
+- Visit `/dashboard`
+- Set `ADMIN_DASHBOARD_USERNAME` and `ADMIN_DASHBOARD_PASSWORD` in your environment
+- Use the dashboard form to update:
+  - name
+  - alias
+  - headline
+  - about text
+  - contact emails
 
-### Option 1: Netlify (fastest)
+## Current Features
 
-1. Push this folder to a GitHub repository.
-2. In Netlify, choose **Add new site** -> **Import an existing project**.
-3. Select the repo and deploy.
-4. Add your custom domain under **Site settings** -> **Domain management**.
+- Profile-driven homepage using data from `/Users/icepik/Desktop/Icepikd3v/README.md`
+- Tech/language showcase including JavaScript, Python, Ruby on Rails, Java, Go, and styling systems
+- Featured project section
+- Dynamic project pages at `/projects/[slug]`
 
-### Option 2: Vercel
+## Next Expansion
 
-1. Push this folder to GitHub.
-2. In Vercel, choose **Add New Project** and import the repo.
-3. Keep defaults (no build command required) and deploy.
-4. Add your domain in project **Settings** -> **Domains**.
-
-### Option 3: GitHub Pages
-
-1. Push to GitHub.
-2. Repo **Settings** -> **Pages**.
-3. Set source to `Deploy from a branch` and choose `main` / root.
-4. Save and wait for your public URL.
-
-## Suggested Next Upgrades
-
-- Add a downloadable PDF resume button.
-- Add real project screenshots/thumbnails.
-- Add a contact form using Formspree or Netlify Forms.
-# Resume
+- Build project-specific landing pages that run/embed live project builds
+- Add media showcase and client-facing service/case-study pages

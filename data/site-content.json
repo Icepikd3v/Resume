@@ -1,0 +1,137 @@
+{
+  "name": "Samuel Farmer",
+  "alias": "Icepikd3v",
+  "headline": "Full Stack Web Developer | Frontend Specialist | 3D Print & Hardware Enthusiast",
+  "about": "I love building useful, user-friendly tools—especially ones that connect software to real-world hardware. I bring a creative, hands-on mindset to every project, whether I'm wiring up a Raspberry Pi, refining a front-end UI, or managing complex print queues.",
+  "contacts": ["sam.d3v.35@gmail.com", "icepik09@gmail.com"],
+  "tutorialVideos": [
+    {
+      "title": "TutorSparkCLI Walkthrough",
+      "embedUrl": "https://www.youtube.com/embed/1bJCNA-b6QU?si=2svlRMsetigKkgvw"
+    },
+    {
+      "title": "TutorSpark CLI UnitTesting",
+      "embedUrl": "https://www.youtube.com/embed/OmeZEv5lqQ4?si=foG6ePd37GAUbg1V"
+    },
+    {
+      "title": "TutorSparkCLI Milestone 1&2",
+      "embedUrl": "https://www.youtube.com/embed/mHErD71iliA?si=NZolxxUDRuCpiKh0"
+    },
+    {
+      "title": "TutorSpark CLI basic",
+      "embedUrl": "https://www.youtube.com/embed/E3CztvIg0Pg?si=-Xy-vcD3KvchOixD"
+    },
+    {
+      "title": "Data Vizualization Presentation",
+      "embedUrl": "https://www.youtube.com/embed/MAJZw9veFAM?si=bUIhpPoMo5UUxTC2"
+    },
+    {
+      "title": "JMeter Stress Testing",
+      "embedUrl": "https://www.youtube.com/embed/0S8MlW4cSI0?si=R3CvUfvaWLCDrZLX"
+    },
+    {
+      "title": "Shell Script Newman Testing",
+      "embedUrl": "https://www.youtube.com/embed/mCmhgPT6Hig?si=BCC_2xanKKB6GFD4"
+    },
+    {
+      "title": "Load Testing POSTMAN",
+      "embedUrl": "https://www.youtube.com/embed/xoGGXKiRMUs?si=0kJFLOZ5XtSseUKx"
+    },
+    {
+      "title": "Selenium Testing",
+      "embedUrl": "https://www.youtube.com/embed/_HG6oPlVgXA?si=2-nC9ZRWvRra8ENd"
+    },
+    {
+      "title": "Integration Testing POSTMAN",
+      "embedUrl": "https://www.youtube.com/embed/3dDtY-NLXr0?si=Gs_n7cN7iqqUOfdB"
+    },
+    {
+      "title": "Unit Testing",
+      "embedUrl": "https://www.youtube.com/embed/V5ZuSPVGVg4?si=pV9uXTcWJ8MvnfbE"
+    },
+    {
+      "title": "Auth0 Flow Progress Code",
+      "embedUrl": "https://www.youtube.com/embed/RbOwJ1nAbHM?si=Hr0gCjwAjPjXpbfw"
+    },
+    {
+      "title": "API Testing",
+      "embedUrl": "https://www.youtube.com/embed/EyX1AE8dvc0?si=biUddAth9Qc58muf"
+    },
+    {
+      "title": "Space Object Library API",
+      "embedUrl": "https://www.youtube.com/embed/gQH3QTUpGLM?si=XZ8n34L1kV_8IwSJ"
+    },
+    {
+      "title": "RESTfull routes using Express.js",
+      "embedUrl": "https://www.youtube.com/embed/p2J6osGjj1A?si=GaATcqFv1liqtN27"
+    },
+    {
+      "title": "Docker Tutorial",
+      "embedUrl": "https://www.youtube.com/embed/F2nZfCW80Xg?si=Z9XY-7oq98zF83Fm"
+    },
+    {
+      "title": "Framer-Motion Library",
+      "embedUrl": "https://www.youtube.com/embed/osoQbvLLu9A?si=QFKo9-pf7ZxzTVLf"
+    },
+    {
+      "title": "Hacker Rank Challenge",
+      "embedUrl": "https://www.youtube.com/embed/3EjQNdZB6W8?si=ZRnkZ2RZ2tIBG-is"
+    },
+    {
+      "title": "Full-Stack Build",
+      "embedUrl": "https://www.youtube.com/embed/eJhxiJ7frnw?si=viNTidKBSzEVsbTp"
+    },
+    {
+      "title": "Unit Testing API POSTMAN",
+      "embedUrl": "https://www.youtube.com/embed/--wzSgzx9i4?si=PeYnwhJsoW8TEBiC"
+    },
+    {
+      "title": "Mongo Testing",
+      "embedUrl": "https://www.youtube.com/embed/l8vxpIGN7go?si=I20Q-yneFLjMYj5a"
+    },
+    {
+      "title": "NodeJS Unit Testing",
+      "embedUrl": "https://www.youtube.com/embed/nFbHjGl7c5A?si=ArVXBRRu_wVEFXHN"
+    }
+  ],
+  "projectVideos": [
+    {
+      "title": "Icepik's OctoManager Brief Sample",
+      "embedUrl": "https://www.youtube.com/embed/7kWzB6CoNBw?si=_sLxajHaAM97-iVv"
+    },
+    {
+      "title": "Spotify Music Search App (pp3-spotify)",
+      "embedUrl": "https://www.youtube.com/embed/PtTNYbZdaSo?si=NRolF4zzR9pktRBx"
+    },
+    {
+      "title": "Spotify Music Search App (pp3-spotify) PT2",
+      "embedUrl": "https://www.youtube.com/embed/t1ljHVm2_eI?si=sYn5DzDQwoZnk45H"
+    },
+    {
+      "title": "UFC-API Mobile",
+      "embedUrl": "https://www.youtube.com/embed/aBhszG4lwLo?si=eVTh4CNUE_xZeYLf"
+    },
+    {
+      "title": "Rick and Morty API Lookout",
+      "embedUrl": "https://www.youtube.com/embed/XThlumqyJVg?si=vKr9A58p64BLcIRW"
+    }
+  ],
+  "printTimelapseVideos": [
+    {
+      "title": "Flexi-Elephants",
+      "embedUrl": "https://www.youtube.com/embed/kx3V1-CHlzA?si=RszP4SLY7-WeXrGq"
+    },
+    {
+      "title": "The Thwacker",
+      "embedUrl": "https://www.youtube.com/embed/gfjCRYMBHYI?si=_VrhTRvpCXpn2_r_"
+    },
+    {
+      "title": "T-Flexi",
+      "embedUrl": "https://www.youtube.com/embed/QZjmHV1mw18?si=6MEyXUfLOJQ3e5tZ"
+    },
+    {
+      "title": "Icepiks 1st year compilation",
+      "embedUrl": "https://www.youtube.com/embed/KmoaSCS27vE?si=xgUs7p7xtvPaQo42"
+    }
+  ]
+}
