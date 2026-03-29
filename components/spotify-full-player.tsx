@@ -5,8 +5,22 @@ import { useSearchParams } from "next/navigation";
 
 const STORAGE_KEY = "spotify_auth_v1";
 const SPOTIFY_PLAYER_NAME = "Resume Site Player";
-const PLAYLIST_URI = "spotify:playlist:37i9dQZF1DXcBWIGoYBM5M";
 const TOKEN_REFRESH_BUFFER_MS = 60_000;
+const DEFAULT_VOLUME = 0.35;
+const AUTH_CODE_STORAGE_KEY = "spotify_auth_code_payload";
+
+const TOP_TEN = [
+  { artist: "Childish Gambino", title: "Feels Like Summer" },
+  { artist: "Kiesza", title: "Hideaway" },
+  { artist: "Teddy Swims", title: "Lose Control (The Village Sessions)" },
+  { artist: "Kayne West", title: "Champion" },
+  { artist: "Nero Skrillex", title: "Promises Remix" },
+  { artist: "Jack Harlow", title: "Trading Places" },
+  { artist: "FKJ Tom Misch", title: "Losing My Way" },
+  { artist: "Chris Stapleton", title: "Think I'm In Love With You" },
+  { artist: "Hippie Sabotage", title: "Trust Nobody" },
+  { artist: "MGK", title: "Pretty Toxic Revolver" },
+] as const;
 
 type StoredAuth = {
   accessToken: string;
@@ -133,13 +147,57 @@ export function SpotifyFullPlayer() {
   const [isPaused, setIsPaused] = useState(true);
   const [positionMs, setPositionMs] = useState(0);
   const [track, setTrack] = useState<SpotifyTrack | null>(null);
+  const [trackUris, setTrackUris] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [premiumBlocked, setPremiumBlocked] = useState(false);
 
   const clientId = process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID || "";
+  const hasClientId = Boolean(clientId);
   const redirectUri = useMemo(() => {
     if (typeof window === "undefined") return "";
     return `${window.location.origin}${window.location.pathname}`;
   }, []);
+  const popupRedirectUri = useMemo(() => {
+    if (typeof window === "undefined") return "";
+    return `${window.location.origin}/spotify-callback`;
+  }, []);
+
+  const exchangeAuthCode = async (code: string, state: string) => {
+    const expectedState = localStorage.getItem("spotify_auth_state");
+    const verifier = localStorage.getItem("spotify_code_verifier");
+    if (!expectedState || expectedState !== state || !verifier) {
+      setError("Spotify login validation failed. Try connecting again.");
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const tokenJson = await spotifyTokenRequest(
+        new URLSearchParams({
+          client_id: clientId,
+          grant_type: "authorization_code",
+          code,
+          redirect_uri: popupRedirectUri || redirectUri,
+          code_verifier: verifier,
+        }),
+      );
+
+      const stored: StoredAuth = {
+        accessToken: tokenJson.access_token,
+        refreshToken: tokenJson.refresh_token,
+        expiresAt: Date.now() + tokenJson.expires_in * 1000,
+      };
+
+      writeStoredAuth(stored);
+      setAuth(stored);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Spotify authorization failed.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     setAuth(readStoredAuth());
@@ -149,56 +207,31 @@ export function SpotifyFullPlayer() {
     const code = searchParams.get("code");
     const state = searchParams.get("state");
     if (!code || !state || !clientId || !redirectUri) return;
+    exchangeAuthCode(code, state).then(() => {
+      window.history.replaceState({}, document.title, window.location.pathname);
+    });
+  }, [clientId, redirectUri, searchParams, popupRedirectUri]);
 
-    const expectedState = localStorage.getItem("spotify_auth_state");
-    const verifier = localStorage.getItem("spotify_code_verifier");
-    if (!expectedState || expectedState !== state || !verifier) {
-      setError("Spotify login validation failed. Try connecting again.");
-      return;
-    }
+  useEffect(() => {
+    if (!hasClientId) return;
 
-    let cancelled = false;
-    setIsLoading(true);
-    setError(null);
+    const poll = window.setInterval(() => {
+      const raw = localStorage.getItem(AUTH_CODE_STORAGE_KEY);
+      if (!raw) return;
 
-    (async () => {
+      localStorage.removeItem(AUTH_CODE_STORAGE_KEY);
       try {
-        const tokenJson = await spotifyTokenRequest(
-          new URLSearchParams({
-            client_id: clientId,
-            grant_type: "authorization_code",
-            code,
-            redirect_uri: redirectUri,
-            code_verifier: verifier,
-          }),
-        );
-
-        const stored: StoredAuth = {
-          accessToken: tokenJson.access_token,
-          refreshToken: tokenJson.refresh_token,
-          expiresAt: Date.now() + tokenJson.expires_in * 1000,
-        };
-
-        if (!cancelled) {
-          writeStoredAuth(stored);
-          setAuth(stored);
-          window.history.replaceState({}, document.title, window.location.pathname);
+        const payload = JSON.parse(raw) as { code?: string; state?: string };
+        if (payload.code && payload.state) {
+          exchangeAuthCode(payload.code, payload.state);
         }
-      } catch (err) {
-        if (!cancelled) {
-          setError(err instanceof Error ? err.message : "Spotify authorization failed.");
-        }
-      } finally {
-        if (!cancelled) {
-          setIsLoading(false);
-        }
+      } catch {
+        setError("Spotify popup callback payload was invalid.");
       }
-    })();
+    }, 600);
 
-    return () => {
-      cancelled = true;
-    };
-  }, [clientId, redirectUri, searchParams]);
+    return () => window.clearInterval(poll);
+  }, [hasClientId, popupRedirectUri, redirectUri]);
 
   useEffect(() => {
     if (!auth || !clientId) return;
@@ -281,7 +314,9 @@ export function SpotifyFullPlayer() {
       });
 
       sdkPlayer.addListener("account_error", ({ message }: { message: string }) => {
-        setError(message);
+        setPremiumBlocked(true);
+        setIsLoading(false);
+        setError(message || "Spotify playback is blocked for this account/app configuration.");
       });
 
       sdkPlayer
@@ -289,7 +324,7 @@ export function SpotifyFullPlayer() {
         .then(() => {
           if (!mounted || !sdkPlayer) return;
           setPlayer(sdkPlayer);
-          return sdkPlayer.setVolume(0.5);
+          return sdkPlayer.setVolume(DEFAULT_VOLUME);
         })
         .catch((err) => setError(err instanceof Error ? err.message : "Spotify player connection failed."));
     };
@@ -311,7 +346,49 @@ export function SpotifyFullPlayer() {
   }, [auth?.accessToken]);
 
   useEffect(() => {
+    if (!auth?.accessToken) return;
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const uriList = (
+          await Promise.all(
+            TOP_TEN.map(async ({ artist, title }) => {
+              const q = encodeURIComponent(`track:${title} artist:${artist}`);
+              const res = await spotifyApi(
+                `https://api.spotify.com/v1/search?q=${q}&type=track&limit=1`,
+                auth.accessToken,
+              );
+              const json = (await res.json()) as { tracks?: { items?: Array<{ uri?: string }> } };
+              return json.tracks?.items?.[0]?.uri || null;
+            }),
+          )
+        ).filter((uri): uri is string => Boolean(uri));
+
+        if (!cancelled) {
+          if (uriList.length === 0) {
+            setError("Could not resolve Spotify URIs for your Top 10 list.");
+          }
+          setTrackUris(uriList);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          if (String(err).toLowerCase().includes("403")) {
+            setPremiumBlocked(true);
+          }
+          setError(err instanceof Error ? err.message : "Unable to build Spotify queue.");
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [auth?.accessToken]);
+
+  useEffect(() => {
     if (!auth?.accessToken || !deviceId) return;
+    if (trackUris.length === 0) return;
 
     let cancelled = false;
 
@@ -325,13 +402,17 @@ export function SpotifyFullPlayer() {
         await spotifyApi(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, auth.accessToken, {
           method: "PUT",
           body: JSON.stringify({
-            context_uri: PLAYLIST_URI,
+            uris: trackUris,
             offset: { position: 0 },
             position_ms: 0,
           }),
         });
       } catch (err) {
         if (!cancelled) {
+          if (String(err).toLowerCase().includes("403")) {
+            setPremiumBlocked(true);
+          }
+          setIsLoading(false);
           setError(err instanceof Error ? err.message : "Failed to start Spotify playback.");
         }
       }
@@ -340,11 +421,10 @@ export function SpotifyFullPlayer() {
     return () => {
       cancelled = true;
     };
-  }, [auth?.accessToken, deviceId]);
+  }, [auth?.accessToken, deviceId, trackUris]);
 
   const connectSpotify = async () => {
-    if (!clientId || !redirectUri) {
-      setError("Missing NEXT_PUBLIC_SPOTIFY_CLIENT_ID in environment.");
+    if (!hasClientId || !popupRedirectUri) {
       return;
     }
 
@@ -371,12 +451,19 @@ export function SpotifyFullPlayer() {
       url.searchParams.set("response_type", "code");
       url.searchParams.set("client_id", clientId);
       url.searchParams.set("scope", scope);
-      url.searchParams.set("redirect_uri", redirectUri);
+      url.searchParams.set("redirect_uri", popupRedirectUri);
       url.searchParams.set("state", state);
       url.searchParams.set("code_challenge_method", "S256");
       url.searchParams.set("code_challenge", challenge);
 
-      window.location.assign(url.toString());
+      const popup = window.open(
+        url.toString(),
+        "spotify-auth",
+        "width=520,height=720,menubar=no,toolbar=no,location=no,status=no,resizable=yes,scrollbars=yes",
+      );
+      if (!popup) {
+        window.location.assign(url.toString());
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unable to start Spotify connection.");
       setIsLoading(false);
@@ -426,7 +513,46 @@ export function SpotifyFullPlayer() {
 
   return (
     <div className="spotify-player-shell">
-      {!auth ? (
+      {premiumBlocked ? (
+        <>
+          <p className="spotify-warning">
+            Spotify full-track playback is blocked for this account/app right now. You can still open tracks directly:
+          </p>
+          <div className="spotify-queue">
+            {TOP_TEN.map((item, idx) => (
+              <p key={item.artist + item.title}>
+                {idx + 1}.{" "}
+                <a
+                  href={`https://open.spotify.com/search/${encodeURIComponent(`${item.artist} ${item.title}`)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {item.artist} - {item.title}
+                </a>
+              </p>
+            ))}
+          </div>
+        </>
+      ) : !hasClientId ? (
+        <>
+          <div className="spotify-preview-fallback">
+            <p>Spotify preview mode is active.</p>
+            <iframe
+              title="Spotify playlist preview"
+              src="https://open.spotify.com/embed/playlist/37i9dQZF1DXcBWIGoYBM5M?utm_source=generator"
+              loading="lazy"
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            />
+          </div>
+          <div className="spotify-queue">
+            {TOP_TEN.map((item, idx) => (
+              <p key={item.artist + item.title}>
+                {idx + 1}. {item.artist} - {item.title}
+              </p>
+            ))}
+          </div>
+        </>
+      ) : !auth ? (
         <button type="button" className="btn btn-primary spotify-connect-btn" onClick={connectSpotify} disabled={isLoading}>
           {isLoading ? "Connecting Spotify..." : "Connect Spotify For Full Tracks"}
         </button>
@@ -455,6 +581,14 @@ export function SpotifyFullPlayer() {
             </button>
           </div>
 
+          <div className="spotify-queue">
+            {TOP_TEN.map((item, idx) => (
+              <p key={item.artist + item.title}>
+                {idx + 1}. {item.artist} - {item.title}
+              </p>
+            ))}
+          </div>
+
           <button type="button" className="btn btn-ghost spotify-disconnect-btn" onClick={clearSpotify}>
             Disconnect Spotify
           </button>
@@ -462,7 +596,9 @@ export function SpotifyFullPlayer() {
       )}
 
       {error ? <p className="spotify-error">{error}</p> : null}
-      <p className="spotify-note">Full playback requires an authenticated Spotify Premium account.</p>
+      <p className="spotify-note">
+        Full playback requires Spotify authentication and account playback permissions.
+      </p>
     </div>
   );
 }

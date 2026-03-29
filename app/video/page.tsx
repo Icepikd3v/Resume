@@ -88,7 +88,7 @@ export default async function VideoPage() {
   return (
     <div className="page-shell video-page">
       <section className="panel hero">
-        <p className="eyebrow">Video</p>
+        <p className="eyebrow">Media Hub</p>
         <h1>Video Library</h1>
         <p className="intro">A categorized archive of tutorials, testing demos, school walkthroughs, and project showcases.</p>
         <div className="chip-row">

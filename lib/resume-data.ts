@@ -57,7 +57,7 @@ export const projects: Project[] = [
     stack: ["React", "Node.js", "Express", "Spotify API", "MongoDB"],
     domain: ["frontend", "backend", "api", "auth"],
     sourceUrl: "https://github.com/Icepikd3v/pp3-spotify",
-    documentationPath: "/Users/icepik/Desktop/pp3-spotify/README.md",
+    documentationPath: "/Users/icepik/dev/pp3-spotify/README.md",
     highlights: [
       "Implemented Spotify OAuth login flow and session-based auth handling.",
       "Built multi-type search results for artists, albums, and tracks.",
@@ -91,10 +91,10 @@ export const projects: Project[] = [
     },
     runtime: {
       appUrl: "http://localhost:3101",
-      backendUrl: "http://localhost:3102",
+      backendUrl: "http://localhost:3001",
       startCommands: [
-        "cd /Users/icepik/Desktop/pp3-spotify/server && PORT=3102 npm install && PORT=3102 npm start",
-        "cd /Users/icepik/Desktop/pp3-spotify/client/spotify && PORT=3101 npm install && PORT=3101 npm start"
+        "cd /Users/icepik/dev/pp3-spotify/server && PORT=3001 npm install && PORT=3001 npm start",
+        "cd /Users/icepik/dev/pp3-spotify/client/spotify && PORT=3101 npm install && PORT=3101 npm start"
       ],
       notes: "Runs as React frontend + Express backend with Spotify OAuth/API integration."
     },
@@ -113,7 +113,7 @@ export const projects: Project[] = [
     stack: ["React", "Next.js", "Tailwind CSS", "Framer Motion", "Howler.js", "LocalStorage"],
     domain: ["frontend", "api", "ui", "student-project"],
     sourceUrl: "https://github.com/Icepikd3v/rick-and-morty-react",
-    documentationPath: "/Users/icepik/Desktop/rick-and-morty-react/README.md",
+    documentationPath: "/Users/icepik/dev/rick-and-morty-react/README.md",
     highlights: [
       "Structured the application around 4+ pages with routing and distinct user flows.",
       "Integrated Rick and Morty API search and detail exploration features.",
@@ -148,7 +148,7 @@ export const projects: Project[] = [
     runtime: {
       appUrl: "http://localhost:3103",
       startCommands: [
-        "cd /Users/icepik/Desktop/rick-and-morty-react/Client/rick-and-morty-api && PORT=3103 npm install && PORT=3103 npm start"
+        "cd /Users/icepik/dev/rick-and-morty-react/Client/rick-and-morty-api && PORT=3103 npm install && PORT=3103 npm start"
       ],
       notes: "Uses Rick and Morty API, framer-motion animations, and howler audio."
     },
@@ -218,7 +218,7 @@ export const projects: Project[] = [
     stack: ["HTML", "CSS", "Tailwind CSS", "Responsive Design"],
     domain: ["frontend", "ui", "student-project"],
     sourceUrl: "https://github.com/Icepikd3v/ReadySetTravel",
-    documentationPath: "/Users/icepik/Desktop/ReadySetTravel/README.md",
+    documentationPath: "/Users/icepik/dev/ReadySetTravel/README.md",
     highlights: [
       "Built multiple content pages including destinations, tours, and blogs.",
       "Improved responsiveness and layout control across milestone iterations.",
@@ -252,7 +252,7 @@ export const projects: Project[] = [
     runtime: {
       appUrl: "http://localhost:3104",
       startCommands: [
-        "cd /Users/icepik/Desktop/ReadySetTravel/dev/readysettravel && python3 -m http.server 3104"
+        "cd /Users/icepik/dev/ReadySetTravel/dev/readysettravel && python3 -m http.server 3104"
       ],
       notes: "Static multi-page travel site powered by HTML/CSS/Tailwind CDN."
     },
@@ -271,7 +271,7 @@ export const projects: Project[] = [
     stack: ["Node.js", "React", "Tailwind CSS", "MongoDB", "OctoPrint API"],
     domain: ["full-stack", "hardware", "analytics", "auth"],
     sourceUrl: "https://github.com/Icepikd3v/icepik-octo-manager",
-    documentationPath: "/Users/icepik/Desktop/icepik-octo-manager/docs/log.md",
+    documentationPath: "/Users/icepik/dev/icepik-octo-manager/docs/log.md",
     highlights: [
       "Designed around multi-user print queue and job lifecycle management.",
       "Implemented admin analytics endpoints and CSV export workflows.",
@@ -305,10 +305,10 @@ export const projects: Project[] = [
     },
     runtime: {
       appUrl: "http://localhost:3105",
-      backendUrl: "http://localhost:3106",
+      backendUrl: "http://localhost:5000",
       startCommands: [
-        "cd /Users/icepik/Desktop/icepik-octo-manager/App/iom-backend && PORT=3106 npm install && PORT=3106 npm run dev",
-        "cd /Users/icepik/Desktop/icepik-octo-manager/App/iom-frontend && PORT=3105 npm install && PORT=3105 npm start"
+        "cd /Users/icepik/dev/icepik-octo-manager/App/iom-backend && PORT=5000 npm install && PORT=5000 node server.js",
+        "cd /Users/icepik/dev/icepik-octo-manager/App/iom-frontend && PORT=3105 npm install && PORT=3105 npm start"
       ],
       notes: "Full-stack app with hardware-oriented OctoPrint workflow integrations."
     },

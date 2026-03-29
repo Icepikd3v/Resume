@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 
 type Portrait = {
   src: string;
@@ -21,6 +22,7 @@ export function PortraitShowcase({ portraits, ownerName }: Props) {
 
   const [activeIndex, setActiveIndex] = useState(defaultIndex);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
 
   const active = portraits[activeIndex];
 
@@ -36,6 +38,11 @@ export function PortraitShowcase({ portraits, ownerName }: Props) {
     if (lightboxIndex === null) return;
     setLightboxIndex((lightboxIndex + 1) % portraits.length);
   };
+
+  useEffect(() => {
+    setIsMounted(true);
+    return () => setIsMounted(false);
+  }, []);
 
   useEffect(() => {
     if (lightboxIndex === null) return;
@@ -69,6 +76,31 @@ export function PortraitShowcase({ portraits, ownerName }: Props) {
     };
   }, [lightboxIndex, portraits.length]);
 
+  const lightbox =
+    lightboxIndex !== null ? (
+      <div className="lightbox-backdrop" onClick={closeLightbox} role="dialog" aria-modal="true">
+        <div className="lightbox-content" onClick={(event) => event.stopPropagation()}>
+          <button type="button" className="lightbox-close" onClick={closeLightbox} aria-label="Close image">
+            ×
+          </button>
+          <button type="button" className="lightbox-arrow left" onClick={showPrev} aria-label="Previous image">
+            ←
+          </button>
+          <div className="lightbox-image-wrap">
+            <Image
+              src={portraits[lightboxIndex].src}
+              alt={`${ownerName} - ${portraits[lightboxIndex].label}`}
+              fill
+              sizes="90vw"
+            />
+          </div>
+          <button type="button" className="lightbox-arrow right" onClick={showNext} aria-label="Next image">
+            →
+          </button>
+        </div>
+      </div>
+    ) : null;
+
   return (
     <div className="portrait-showcase">
       <div className="portrait-main-wrap">
@@ -84,29 +116,7 @@ export function PortraitShowcase({ portraits, ownerName }: Props) {
         </button>
       </div>
 
-      {lightboxIndex !== null ? (
-        <div className="lightbox-backdrop" onClick={closeLightbox} role="dialog" aria-modal="true">
-          <div className="lightbox-content" onClick={(event) => event.stopPropagation()}>
-            <button type="button" className="lightbox-close" onClick={closeLightbox} aria-label="Close image">
-              x
-            </button>
-            <button type="button" className="lightbox-arrow left" onClick={showPrev} aria-label="Previous image">
-              ←
-            </button>
-            <div className="lightbox-image-wrap">
-              <Image
-                src={portraits[lightboxIndex].src}
-                alt={`${ownerName} - ${portraits[lightboxIndex].label}`}
-                fill
-                sizes="90vw"
-              />
-            </div>
-            <button type="button" className="lightbox-arrow right" onClick={showNext} aria-label="Next image">
-              →
-            </button>
-          </div>
-        </div>
-      ) : null}
+      {isMounted ? createPortal(lightbox, document.body) : null}
     </div>
   );
 }

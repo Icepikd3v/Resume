@@ -25,6 +25,13 @@ const runtimeEnvMap: Record<string, RuntimeOverride> = {
   }
 };
 
+const proxyPathMap: Record<string, string> = {
+  "pp3-spotify": "/showcase/pp3-spotify",
+  "rick-and-morty-react": "/showcase/rick-and-morty-react",
+  "ready-set-travel": "/showcase/ready-set-travel",
+  "icepik-octo-manager": "/showcase/icepik-octo-manager"
+};
+
 export function resolveProjectRuntime(project: Project) {
   const fallback = project.runtime;
   if (!fallback) return undefined;
@@ -39,3 +46,14 @@ export function resolveProjectRuntime(project: Project) {
   };
 }
 
+export function resolveProjectEmbedUrl(project: Project, appUrl: string) {
+  const useProxy = process.env.SHOWCASE_PROXY_ENABLED === "true";
+  const proxyPath = proxyPathMap[project.slug];
+  const hasConfiguredTarget = Boolean(runtimeEnvMap[project.slug]?.appUrl);
+
+  if (useProxy && proxyPath && hasConfiguredTarget) {
+    return proxyPath;
+  }
+
+  return appUrl;
+}

@@ -1,7 +1,33 @@
 import Link from "next/link";
 import { PortraitShowcase } from "@/components/portrait-showcase";
-import { StudioAudioPlayer } from "@/components/studio-audio-player";
+import { MissionControlWidget } from "@/components/mission-control-widget";
 import { getSiteContent } from "@/lib/content-store";
+import { findProjectBySlug } from "@/lib/resume-data";
+import type { IconType } from "react-icons";
+import {
+  SiCss,
+  SiExpress,
+  SiGithub,
+  SiGo,
+  SiHtml5,
+  SiJavascript,
+  SiMongodb,
+  SiMysql,
+  SiNextdotjs,
+  SiNodedotjs,
+  SiOctoprint,
+  SiPostman,
+  SiPython,
+  SiReact,
+  SiRaspberrypi,
+  SiRubyonrails,
+  SiRuby,
+  SiSelenium,
+  SiSwift,
+  SiTailwindcss,
+  SiTypescript
+} from "react-icons/si";
+import { FaApple, FaAws, FaPrint } from "react-icons/fa";
 
 export const dynamic = "force-dynamic";
 
@@ -40,6 +66,46 @@ function MailIcon() {
 
 export default async function HomePage() {
   const content = await getSiteContent();
+  const toolkitIcons: { label: string; Icon: IconType; color: string }[] = [
+    { label: "React", Icon: SiReact, color: "#61DAFB" },
+    { label: "Next.js", Icon: SiNextdotjs, color: "#FFFFFF" },
+    { label: "TypeScript", Icon: SiTypescript, color: "#3178C6" },
+    { label: "JavaScript", Icon: SiJavascript, color: "#F7DF1E" },
+    { label: "Node.js", Icon: SiNodedotjs, color: "#5FA04E" },
+    { label: "Express", Icon: SiExpress, color: "#E5E7EB" },
+    { label: "MongoDB", Icon: SiMongodb, color: "#47A248" },
+    { label: "MySQL", Icon: SiMysql, color: "#4479A1" },
+    { label: "HTML5", Icon: SiHtml5, color: "#E34F26" },
+    { label: "CSS3", Icon: SiCss, color: "#1572B6" },
+    { label: "Tailwind", Icon: SiTailwindcss, color: "#38BDF8" },
+    { label: "Go", Icon: SiGo, color: "#00ADD8" },
+    { label: "Ruby", Icon: SiRuby, color: "#CC342D" },
+    { label: "Rails", Icon: SiRubyonrails, color: "#D30001" },
+    { label: "Python", Icon: SiPython, color: "#3776AB" },
+    { label: "OctoPrint", Icon: SiOctoprint, color: "#13C4A3" },
+    { label: "Raspberry Pi", Icon: SiRaspberrypi, color: "#C51A4A" },
+    { label: "3D Printer", Icon: FaPrint, color: "#8AB4F8" },
+    { label: "AWS", Icon: FaAws, color: "#FF9900" },
+    { label: "Postman", Icon: SiPostman, color: "#FF6C37" },
+    { label: "Selenium", Icon: SiSelenium, color: "#43B02A" },
+    { label: "Swift", Icon: SiSwift, color: "#FA7343" },
+    { label: "iOS", Icon: FaApple, color: "#D1D5DB" },
+    { label: "GitHub", Icon: SiGithub, color: "#F8FAFC" }
+  ];
+  const getLiveSitePreview = (site: { name: string; url: string }) => {
+    const name = site.name.toLowerCase().replace(/\s+/g, "");
+    const url = site.url.toLowerCase();
+
+    if (name.includes("elysium") || url.includes("elysiummall.com")) {
+      return "/Elysiummall.com.png";
+    }
+
+    if (name.includes("mybrothersfinds") || url.includes("mybrothersfinds.com")) {
+      return "/MyBrothersFinds.com.png";
+    }
+
+    return "/Elysiummall.com.png";
+  };
 
   return (
     <div className="page-shell">
@@ -79,20 +145,27 @@ export default async function HomePage() {
                 ))}
               </div>
             </article>
-          </aside>
-        </div>
 
-        <article className="panel side-card player-card" aria-label="Background player module">
-          <p className="eyebrow">Studio Player</p>
-          <h3>Chill Instrumental Audio</h3>
-          <p className="muted">Compact audio-only player with a non-pop ambient tracklist.</p>
-          <StudioAudioPlayer />
-        </article>
+            <article className="panel side-card player-card" aria-label="Mission Control live widget">
+              <MissionControlWidget />
+            </article>
+          </aside>
+
+          <div className="toolkit-under-row">
+          <div className="toolkit-gap-icons" aria-label="Core toolkit icons">
+            {toolkitIcons.map((tool) => (
+              <span key={tool.label} className="toolkit-gap-icon" title={tool.label} aria-label={tool.label} data-label={tool.label}>
+                <tool.Icon aria-hidden="true" style={{ color: tool.color }} />
+              </span>
+            ))}
+          </div>
+          </div>
+        </div>
       </section>
 
       <section id="about" className="panel">
         <h2>About Me</h2>
-        <p># Hi, I&apos;m Samuel Farmer (aka icepikd3v)</p>
+        <p>Hi, I&apos;m Samuel Farmer (aka icepikd3v)</p>
         <p>
           Full-Stack Developer | Full Sail University Alumni
           <br />
@@ -133,7 +206,10 @@ export default async function HomePage() {
               <p>{project.summary}</p>
               <p className="muted">{project.stack.join(" • ")}</p>
               <div className="project-links">
-                <Link href={`/projects/${project.slug}`} className="inline-link">
+                <Link
+                  href={findProjectBySlug(project.slug)?.runtime ? `/projects/${project.slug}/live` : `/projects/${project.slug}`}
+                  className="inline-link"
+                >
                   Open Project Showcase
                 </Link>
                 <a href={project.repo}>Repository</a>
@@ -148,6 +224,14 @@ export default async function HomePage() {
         <div className="grid columns-2">
           {content.liveSites.map((site) => (
             <article className="card" key={site.name + site.url}>
+              <a href={site.url} target="_blank" rel="noreferrer" className="live-site-preview-link">
+                <img
+                  src={getLiveSitePreview(site)}
+                  alt={`${site.name} website preview`}
+                  className="live-site-preview"
+                  loading="lazy"
+                />
+              </a>
               <h3>{site.name}</h3>
               <p className="muted">{site.description}</p>
               <a href={site.url} target="_blank" rel="noreferrer">
@@ -231,10 +315,6 @@ export default async function HomePage() {
           </article>
         </div>
       </section>
-
-      <footer className="site-footer">
-        © {new Date().getFullYear()} {content.name} ({content.alias}) · Resume Site
-      </footer>
     </div>
   );
 }

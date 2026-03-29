@@ -8,8 +8,8 @@ export default async function S3DPrintProcessingPage() {
   return (
     <div className="page-shell s3d-page">
       <section className="panel hero">
-        <p className="eyebrow">S3D Print&Processing</p>
-        <h1>S3D Print&Processing</h1>
+        <p className="eyebrow">Print Lab</p>
+        <h1>3D Print & Processing</h1>
         <p className="intro">
           A focused lab page for FDM printing, OctoPrint workflows, and post-processing showcases.
         </p>

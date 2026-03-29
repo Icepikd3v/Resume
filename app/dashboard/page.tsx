@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 
 type FeaturedProject = {
   slug: string;
@@ -58,6 +58,27 @@ type ProjectDraft = {
 type MediaGroup = "portraits" | "printGallery";
 type VideoGroup = "tutorialVideos" | "projectVideos" | "printTimelapseVideos";
 
+type ListKey =
+  | "portraits"
+  | "printGallery"
+  | "featuredProjects"
+  | "liveSites"
+  | "tutorialVideos"
+  | "projectVideos"
+  | "printTimelapseVideos";
+
+const ITEMS_PER_PAGE = 10;
+
+const INITIAL_SECTION_PAGES: Record<ListKey, number> = {
+  portraits: 1,
+  printGallery: 1,
+  featuredProjects: 1,
+  liveSites: 1,
+  tutorialVideos: 1,
+  projectVideos: 1,
+  printTimelapseVideos: 1
+};
+
 const defaultContent: SiteContent = {
   name: "",
   alias: "",
@@ -96,6 +117,42 @@ function normalizeContent(raw: Partial<SiteContent>): SiteContent {
     projectVideos: Array.isArray(raw.projectVideos) ? raw.projectVideos : [],
     printTimelapseVideos: Array.isArray(raw.printTimelapseVideos) ? raw.printTimelapseVideos : []
   };
+}
+
+function getLiveSitePreview(site: LiveSite): string {
+  const name = site.name.toLowerCase().replace(/\s+/g, "");
+  const url = site.url.toLowerCase();
+
+  if (name.includes("elysium") || url.includes("elysiummall.com")) {
+    return "/Elysiummall.com.png";
+  }
+
+  if (name.includes("mybrothersfinds") || url.includes("mybrothersfinds.com")) {
+    return "/MyBrothersFinds.com.png";
+  }
+
+  return "/Elysiummall.com.png";
+}
+
+function getYouTubeVideoId(url: string): string | null {
+  if (!url) return null;
+  const normalized = url.trim();
+
+  const embedMatch = normalized.match(/youtube\.com\/embed\/([^?&#/]+)/i);
+  if (embedMatch?.[1]) return embedMatch[1];
+
+  const watchMatch = normalized.match(/[?&]v=([^?&#]+)/i);
+  if (watchMatch?.[1]) return watchMatch[1];
+
+  const shortMatch = normalized.match(/youtu\.be\/([^?&#/]+)/i);
+  if (shortMatch?.[1]) return shortMatch[1];
+
+  return null;
+}
+
+function getYouTubeThumbnail(url: string): string | null {
+  const id = getYouTubeVideoId(url);
+  return id ? `https://img.youtube.com/vi/${id}/mqdefault.jpg` : null;
 }
 
 function readImage(file: File): Promise<HTMLImageElement> {
@@ -173,6 +230,77 @@ export default function DashboardPage() {
     title: "",
     embedUrl: ""
   });
+  const [sectionPages, setSectionPages] = useState<Record<ListKey, number>>(INITIAL_SECTION_PAGES);
+
+  const listSizes = useMemo(
+    () => ({
+      portraits: content.portraits.length,
+      printGallery: content.printGallery.length,
+      featuredProjects: content.featuredProjects.length,
+      liveSites: content.liveSites.length,
+      tutorialVideos: content.tutorialVideos.length,
+      projectVideos: content.projectVideos.length,
+      printTimelapseVideos: content.printTimelapseVideos.length
+    }),
+    [
+      content.portraits.length,
+      content.printGallery.length,
+      content.featuredProjects.length,
+      content.liveSites.length,
+      content.tutorialVideos.length,
+      content.projectVideos.length,
+      content.printTimelapseVideos.length
+    ]
+  );
+
+  const paginateItems = <T,>(key: ListKey, items: T[]) => {
+    const currentPage = sectionPages[key] || 1;
+    const totalPages = Math.max(1, Math.ceil(items.length / ITEMS_PER_PAGE));
+    const safePage = Math.min(currentPage, totalPages);
+    const startIndex = (safePage - 1) * ITEMS_PER_PAGE;
+    const pageItems = items.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+    return {
+      pageItems,
+      currentPage: safePage,
+      totalPages,
+      startIndex
+    };
+  };
+
+  const changeSectionPage = (key: ListKey, delta: number) => {
+    setSectionPages((prev) => {
+      const maxPage = Math.max(1, Math.ceil((listSizes[key] || 0) / ITEMS_PER_PAGE));
+      const next = Math.min(maxPage, Math.max(1, (prev[key] || 1) + delta));
+      return { ...prev, [key]: next };
+    });
+  };
+
+  const renderPagination = (key: ListKey, currentPage: number, totalPages: number) => {
+    if (totalPages <= 1) return null;
+
+    return (
+      <div className="dashboard-pagination">
+        <button
+          type="button"
+          className="btn btn-ghost btn-small"
+          onClick={() => changeSectionPage(key, -1)}
+          disabled={currentPage <= 1}
+        >
+          Previous
+        </button>
+        <p className="muted">Page {currentPage} of {totalPages}</p>
+        <button
+          type="button"
+          className="btn btn-ghost btn-small"
+          onClick={() => changeSectionPage(key, 1)}
+          disabled={currentPage >= totalPages}
+        >
+          Next
+        </button>
+      </div>
+    );
+  };
 
   const loadContent = () => {
     fetch("/api/content")
@@ -188,6 +316,21 @@ export default function DashboardPage() {
     if (!isAuthenticated) return;
     loadContent();
   }, [isAuthenticated]);
+
+  useEffect(() => {
+    setSectionPages((prev) => ({
+      portraits: Math.min(prev.portraits, Math.max(1, Math.ceil(listSizes.portraits / ITEMS_PER_PAGE))),
+      printGallery: Math.min(prev.printGallery, Math.max(1, Math.ceil(listSizes.printGallery / ITEMS_PER_PAGE))),
+      featuredProjects: Math.min(prev.featuredProjects, Math.max(1, Math.ceil(listSizes.featuredProjects / ITEMS_PER_PAGE))),
+      liveSites: Math.min(prev.liveSites, Math.max(1, Math.ceil(listSizes.liveSites / ITEMS_PER_PAGE))),
+      tutorialVideos: Math.min(prev.tutorialVideos, Math.max(1, Math.ceil(listSizes.tutorialVideos / ITEMS_PER_PAGE))),
+      projectVideos: Math.min(prev.projectVideos, Math.max(1, Math.ceil(listSizes.projectVideos / ITEMS_PER_PAGE))),
+      printTimelapseVideos: Math.min(
+        prev.printTimelapseVideos,
+        Math.max(1, Math.ceil(listSizes.printTimelapseVideos / ITEMS_PER_PAGE))
+      )
+    }));
+  }, [listSizes]);
 
   const updateField = (field: "name" | "alias" | "headline", value: string) => {
     setContent((prev) => ({ ...prev, [field]: value }));
@@ -567,6 +710,11 @@ export default function DashboardPage() {
     setStatus("Loading...");
   };
 
+  const portraitPage = paginateItems("portraits", content.portraits);
+  const projectPage = paginateItems("featuredProjects", content.featuredProjects);
+  const printPage = paginateItems("printGallery", content.printGallery);
+  const liveSitePage = paginateItems("liveSites", content.liveSites);
+
   const onSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setStatus("Saving...");
@@ -589,68 +737,85 @@ export default function DashboardPage() {
     setStatus("Saved. Refresh homepage to verify updates.");
   };
 
-  const renderVideoPanel = (group: VideoGroup, heading: string, newLabel: string) => (
-    <section className="panel">
-      <h2>{heading}</h2>
-      <div className="dashboard-list">
-        {content[group].length === 0 ? (
-          <p className="muted">No videos yet.</p>
-        ) : (
-          content[group].map((video, index) => (
-            <article key={`${video.title}-${index}`} className="dashboard-item project-list-item">
-              <div className="project-list-meta">
-                <p className="project-list-title">{video.title}</p>
-                <p className="muted">{video.embedUrl || "Embed URL pending"}</p>
-              </div>
-              <div className="project-list-actions">
-                <button type="button" className="btn btn-ghost btn-small" onClick={() => startEditVideo(group, index)}>
-                  Edit
-                </button>
-                <button type="button" className="btn btn-ghost btn-small" onClick={() => removeVideo(group, index)}>
-                  Remove
-                </button>
-              </div>
-            </article>
-          ))
-        )}
-      </div>
-      <button type="button" className="btn btn-ghost" onClick={() => startNewVideo(group)}>
-        {newLabel}
-      </button>
+  const renderVideoPanel = (group: VideoGroup, heading: string, newLabel: string) => {
+    const page = paginateItems(group, content[group]);
 
-      {showVideoForm && activeVideoGroup === group ? (
-        <article className="dashboard-item">
-          <h3>{editingVideoIndex === null ? `Add ${videoGroupLabel(group)} Video` : `Edit ${videoGroupLabel(group)} Video`}</h3>
-          <div className="dashboard-form">
-            <label>
-              Video Title
-              <input
-                value={videoDraft.title}
-                onChange={(e) => setVideoDraft((prev) => ({ ...prev, title: e.target.value }))}
-                required
-              />
-            </label>
-            <label>
-              YouTube Embed URL
-              <input
-                value={videoDraft.embedUrl}
-                onChange={(e) => setVideoDraft((prev) => ({ ...prev, embedUrl: e.target.value }))}
-                placeholder="https://www.youtube.com/embed/..."
-              />
-            </label>
-          </div>
-          <div className="project-list-actions">
-            <button type="button" className="btn btn-primary btn-small" onClick={saveVideoDraft}>
-              Save Video
-            </button>
-            <button type="button" className="btn btn-ghost btn-small" onClick={cancelVideoForm}>
-              Cancel
-            </button>
-          </div>
-        </article>
-      ) : null}
-    </section>
-  );
+    return (
+      <section className="panel">
+        <h2>{heading}</h2>
+        <div className="dashboard-list">
+          {content[group].length === 0 ? (
+            <p className="muted">No videos yet.</p>
+          ) : (
+            page.pageItems.map((video, index) => {
+              const globalIndex = page.startIndex + index;
+              const thumb = getYouTubeThumbnail(video.embedUrl);
+
+              return (
+                <article key={`${video.title}-${globalIndex}`} className="dashboard-item dashboard-list-row compact-row">
+                  <div className="row-thumb-wrap">
+                    {thumb ? (
+                      <img src={thumb} alt={video.title} className="row-thumb" />
+                    ) : (
+                      <div className="row-thumb row-thumb-fallback">VID</div>
+                    )}
+                  </div>
+                  <div className="project-list-meta">
+                    <p className="project-list-title">{video.title}</p>
+                    <p className="muted">{video.embedUrl || "Embed URL pending"}</p>
+                  </div>
+                  <div className="project-list-actions">
+                    <button type="button" className="btn btn-ghost btn-small" onClick={() => startEditVideo(group, globalIndex)}>
+                      Edit
+                    </button>
+                    <button type="button" className="btn btn-ghost btn-small" onClick={() => removeVideo(group, globalIndex)}>
+                      Remove
+                    </button>
+                  </div>
+                </article>
+              );
+            })
+          )}
+          {renderPagination(group, page.currentPage, page.totalPages)}
+        </div>
+        <button type="button" className="btn btn-ghost" onClick={() => startNewVideo(group)}>
+          {newLabel}
+        </button>
+
+        {showVideoForm && activeVideoGroup === group ? (
+          <article className="dashboard-item">
+            <h3>{editingVideoIndex === null ? `Add ${videoGroupLabel(group)} Video` : `Edit ${videoGroupLabel(group)} Video`}</h3>
+            <div className="dashboard-form">
+              <label>
+                Video Title
+                <input
+                  value={videoDraft.title}
+                  onChange={(e) => setVideoDraft((prev) => ({ ...prev, title: e.target.value }))}
+                  required
+                />
+              </label>
+              <label>
+                YouTube Embed URL
+                <input
+                  value={videoDraft.embedUrl}
+                  onChange={(e) => setVideoDraft((prev) => ({ ...prev, embedUrl: e.target.value }))}
+                  placeholder="https://www.youtube.com/embed/..."
+                />
+              </label>
+            </div>
+            <div className="project-list-actions">
+              <button type="button" className="btn btn-primary btn-small" onClick={saveVideoDraft}>
+                Save Video
+              </button>
+              <button type="button" className="btn btn-ghost btn-small" onClick={cancelVideoForm}>
+                Cancel
+              </button>
+            </div>
+          </article>
+        ) : null}
+      </section>
+    );
+  };
 
   return (
     <div className="page-shell">
@@ -709,32 +874,36 @@ export default function DashboardPage() {
               {content.portraits.length === 0 ? (
                 <p className="muted">No profile pictures yet.</p>
               ) : (
-                content.portraits.map((item, index) => (
-                  <article
-                    key={item.src + index}
-                    className="dashboard-item media-list-item draggable-item"
-                    draggable
-                    onDragStart={() => onPortraitDragStart(index)}
-                    onDragOver={(event) => event.preventDefault()}
-                    onDrop={() => onPortraitDrop(index)}
-                    onDragEnd={() => setDraggedPortraitIndex(null)}
-                  >
-                    <img src={item.src} alt={item.label} className="media-thumb" />
-                    <div className="project-list-meta">
-                      <p className="project-list-title">{item.label}</p>
-                      <p className="muted drag-hint">Drag to reorder</p>
-                    </div>
-                    <div className="project-list-actions">
-                      <button type="button" className="btn btn-ghost btn-small" onClick={() => startEditMedia("portraits", index)}>
-                        Edit
-                      </button>
-                      <button type="button" className="btn btn-ghost btn-small" onClick={() => removeMedia("portraits", index)}>
-                        Remove
-                      </button>
-                    </div>
-                  </article>
-                ))
+                portraitPage.pageItems.map((item, index) => {
+                  const globalIndex = portraitPage.startIndex + index;
+                  return (
+                    <article
+                      key={item.src + globalIndex}
+                      className="dashboard-item dashboard-list-row media-list-item draggable-item compact-row"
+                      draggable
+                      onDragStart={() => onPortraitDragStart(globalIndex)}
+                      onDragOver={(event) => event.preventDefault()}
+                      onDrop={() => onPortraitDrop(globalIndex)}
+                      onDragEnd={() => setDraggedPortraitIndex(null)}
+                    >
+                      <img src={item.src} alt={item.label} className="media-thumb row-thumb" />
+                      <div className="project-list-meta">
+                        <p className="project-list-title">{item.label}</p>
+                        <p className="muted drag-hint">Drag to reorder</p>
+                      </div>
+                      <div className="project-list-actions">
+                        <button type="button" className="btn btn-ghost btn-small" onClick={() => startEditMedia("portraits", globalIndex)}>
+                          Edit
+                        </button>
+                        <button type="button" className="btn btn-ghost btn-small" onClick={() => removeMedia("portraits", globalIndex)}>
+                          Remove
+                        </button>
+                      </div>
+                    </article>
+                  );
+                })
               )}
+              {renderPagination("portraits", portraitPage.currentPage, portraitPage.totalPages)}
             </div>
             <button type="button" className="btn btn-ghost" onClick={() => startNewMedia("portraits")}>
               New / Upload Profile Pic
@@ -814,25 +983,32 @@ export default function DashboardPage() {
               {content.featuredProjects.length === 0 ? (
                 <p className="muted">No projects added yet.</p>
               ) : (
-                content.featuredProjects.map((project, index) => (
-                  <article key={project.slug + index} className="dashboard-item project-list-item">
-                    <div className="project-list-meta">
-                      <p className="project-list-title">{project.name}</p>
-                      <p className="muted">
-                        {project.category} · /projects/{project.slug}
-                      </p>
-                    </div>
-                    <div className="project-list-actions">
-                      <button type="button" className="btn btn-ghost btn-small" onClick={() => startEditProject(index)}>
-                        Edit
-                      </button>
-                      <button type="button" className="btn btn-ghost btn-small" onClick={() => removeProject(index)}>
-                        Remove
-                      </button>
-                    </div>
-                  </article>
-                ))
+                projectPage.pageItems.map((project, index) => {
+                  const globalIndex = projectPage.startIndex + index;
+                  return (
+                    <article key={project.slug + globalIndex} className="dashboard-item dashboard-list-row compact-row">
+                      <div className="row-thumb-wrap">
+                        <div className="row-thumb row-thumb-fallback">PRJ</div>
+                      </div>
+                      <div className="project-list-meta">
+                        <p className="project-list-title">{project.name}</p>
+                        <p className="muted">
+                          {project.category} · /projects/{project.slug}
+                        </p>
+                      </div>
+                      <div className="project-list-actions">
+                        <button type="button" className="btn btn-ghost btn-small" onClick={() => startEditProject(globalIndex)}>
+                          Edit
+                        </button>
+                        <button type="button" className="btn btn-ghost btn-small" onClick={() => removeProject(globalIndex)}>
+                          Remove
+                        </button>
+                      </div>
+                    </article>
+                  );
+                })
               )}
+              {renderPagination("featuredProjects", projectPage.currentPage, projectPage.totalPages)}
             </div>
 
             <button type="button" className="btn btn-ghost" onClick={startNewProject}>
@@ -917,23 +1093,27 @@ export default function DashboardPage() {
               {content.printGallery.length === 0 ? (
                 <p className="muted">No print media yet.</p>
               ) : (
-                content.printGallery.map((item, index) => (
-                  <article key={item.src + index} className="dashboard-item media-list-item">
-                    <img src={item.src} alt={item.label} className="media-thumb media-thumb-print" />
-                    <div className="project-list-meta">
-                      <p className="project-list-title">{item.label}</p>
-                    </div>
-                    <div className="project-list-actions">
-                      <button type="button" className="btn btn-ghost btn-small" onClick={() => startEditMedia("printGallery", index)}>
-                        Edit
-                      </button>
-                      <button type="button" className="btn btn-ghost btn-small" onClick={() => removeMedia("printGallery", index)}>
-                        Remove
-                      </button>
-                    </div>
-                  </article>
-                ))
+                printPage.pageItems.map((item, index) => {
+                  const globalIndex = printPage.startIndex + index;
+                  return (
+                    <article key={item.src + globalIndex} className="dashboard-item dashboard-list-row media-list-item compact-row">
+                      <img src={item.src} alt={item.label} className="media-thumb media-thumb-print row-thumb" />
+                      <div className="project-list-meta">
+                        <p className="project-list-title">{item.label}</p>
+                      </div>
+                      <div className="project-list-actions">
+                        <button type="button" className="btn btn-ghost btn-small" onClick={() => startEditMedia("printGallery", globalIndex)}>
+                          Edit
+                        </button>
+                        <button type="button" className="btn btn-ghost btn-small" onClick={() => removeMedia("printGallery", globalIndex)}>
+                          Remove
+                        </button>
+                      </div>
+                    </article>
+                  );
+                })
               )}
+              {renderPagination("printGallery", printPage.currentPage, printPage.totalPages)}
             </div>
             <button type="button" className="btn btn-ghost" onClick={() => startNewMedia("printGallery")}>
               New / Upload Print Media
@@ -979,23 +1159,30 @@ export default function DashboardPage() {
               {content.liveSites.length === 0 ? (
                 <p className="muted">No live links yet.</p>
               ) : (
-                content.liveSites.map((site, index) => (
-                  <article key={site.url + index} className="dashboard-item project-list-item">
-                    <div className="project-list-meta">
-                      <p className="project-list-title">{site.name}</p>
-                      <p className="muted">{site.description || site.url}</p>
-                    </div>
-                    <div className="project-list-actions">
-                      <button type="button" className="btn btn-ghost btn-small" onClick={() => startEditLiveSite(index)}>
-                        Edit
-                      </button>
-                      <button type="button" className="btn btn-ghost btn-small" onClick={() => removeLiveSite(index)}>
-                        Remove
-                      </button>
-                    </div>
-                  </article>
-                ))
+                liveSitePage.pageItems.map((site, index) => {
+                  const globalIndex = liveSitePage.startIndex + index;
+                  return (
+                    <article key={site.url + globalIndex} className="dashboard-item dashboard-list-row compact-row">
+                      <div className="row-thumb-wrap">
+                        <img src={getLiveSitePreview(site)} alt={site.name} className="row-thumb" />
+                      </div>
+                      <div className="project-list-meta">
+                        <p className="project-list-title">{site.name}</p>
+                        <p className="muted">{site.description || site.url}</p>
+                      </div>
+                      <div className="project-list-actions">
+                        <button type="button" className="btn btn-ghost btn-small" onClick={() => startEditLiveSite(globalIndex)}>
+                          Edit
+                        </button>
+                        <button type="button" className="btn btn-ghost btn-small" onClick={() => removeLiveSite(globalIndex)}>
+                          Remove
+                        </button>
+                      </div>
+                    </article>
+                  );
+                })
               )}
+              {renderPagination("liveSites", liveSitePage.currentPage, liveSitePage.totalPages)}
             </div>
 
             <button type="button" className="btn btn-ghost" onClick={startNewLiveSite}>
