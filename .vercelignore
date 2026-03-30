@@ -1,0 +1,5 @@
+# Never deploy local build/cache artifacts
+.next/
+tmp/
+coverage/
+*.log
