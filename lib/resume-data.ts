@@ -22,6 +22,12 @@ export type Project = {
     startCommands: string[];
     notes?: string;
   };
+  testingAccess?: {
+    username: string;
+    password: string;
+    scope: string;
+  };
+  integrationPlaceholders?: string[];
   theme?: {
     accent: string;
     accentSoft: string;
@@ -98,6 +104,16 @@ export const projects: Project[] = [
       ],
       notes: "Runs as React frontend + Express backend with Spotify OAuth/API integration."
     },
+    testingAccess: {
+      username: "icepikd3v@gmail.com",
+      password: "Admin12345!",
+      scope: "Frontend-only demo credentials (local mock search mode) when Spotify/OAuth services are unavailable."
+    },
+    integrationPlaceholders: [
+      "Spotify OAuth callback and API token flows can stay in placeholder/demo mode during downtime.",
+      "Search results can be served from local demo data while backend/API dependencies are offline.",
+      "Live Spotify account authentication should resume once backend secrets and services are restored."
+    ],
     theme: {
       accent: "#1db954",
       accentSoft: "#7fffb4",
@@ -152,6 +168,16 @@ export const projects: Project[] = [
       ],
       notes: "Uses Rick and Morty API, framer-motion animations, and howler audio."
     },
+    testingAccess: {
+      username: "icepikd3v@gmail.com",
+      password: "Admin12345!",
+      scope: "Frontend-only demo credentials for safe showcase login."
+    },
+    integrationPlaceholders: [
+      "Rick and Morty API requests gracefully fall back to local demo characters during outages.",
+      "Any unavailable upstream API responses are replaced with placeholder/demo dataset results.",
+      "Live API-backed behavior can be restored later without changing the user flow."
+    ],
     theme: {
       accent: "#84f729",
       accentSoft: "#9be7ff",
@@ -271,7 +297,7 @@ export const projects: Project[] = [
     stack: ["Node.js", "React", "Tailwind CSS", "MongoDB", "OctoPrint API"],
     domain: ["full-stack", "hardware", "analytics", "auth"],
     sourceUrl: "https://github.com/Icepikd3v/icepik-octo-manager",
-    documentationPath: "/Users/icepik/dev/icepik-octo-manager/docs/log.md",
+    documentationPath: "/Users/icepik/dev/icepik-octo-manager/README.md",
     highlights: [
       "Designed around multi-user print queue and job lifecycle management.",
       "Implemented admin analytics endpoints and CSV export workflows.",
@@ -312,10 +338,84 @@ export const projects: Project[] = [
       ],
       notes: "Full-stack app with hardware-oriented OctoPrint workflow integrations."
     },
+    testingAccess: {
+      username: "icepikd3v@gmail.com",
+      password: "Admin12345!",
+      scope: "Frontend-only testing credentials for demo access."
+    },
+    integrationPlaceholders: [
+      "OctoPrint webhook URLs can be demo placeholders while printer services are offline.",
+      "API keys and hardware host/IP fields should use placeholder values for public testing.",
+      "Live printer telemetry/actions are expected to remain mocked until hardware is back online."
+    ],
     theme: {
       accent: "#0ea5e9",
       accentSoft: "#f59e0b",
       surface: "rgba(15, 23, 42, 0.92)"
+    }
+  },
+  {
+    id: "ufc-mobile",
+    slug: "ufc-api",
+    title: "UFC Mobile (RESTful API Integration)",
+    summary:
+      "React Native mobile app connected to UFC REST API services for fighter management workflows including list, detail, create, update, and delete operations.",
+    stack: ["React Native", "JavaScript", "Axios", "React Navigation", "REST API"],
+    domain: ["mobile", "api", "crud"],
+    sourceUrl: "https://github.com/Icepikd3v/ufc-mobile",
+    documentationPath: "/Users/icepik/dev/ufc-mobile/README.md",
+    highlights: [
+      "Built cross-platform mobile UX around UFC fighter CRUD workflows.",
+      "Integrated live API data flows for reading and mutating fighter records.",
+      "Organized app screens for dashboard, details, add, and update operations.",
+      "Connected mobile client behavior to real backend endpoint contracts."
+    ],
+    improvementIdeas: [
+      "Add stronger client-side validation and structured error boundaries.",
+      "Implement offline caching and optimistic updates for better mobile UX.",
+      "Add automated end-to-end mobile test coverage for API state transitions."
+    ],
+    showcase: {
+      hero: "UFC fighter management from mobile",
+      subhero:
+        "A React Native companion application wired to REST API endpoints for fighter browsing and full CRUD actions.",
+      audience: "Built for users who need mobile access to fighter records and update workflows.",
+      featureBlocks: [
+        {
+          title: "Fighter Dashboard",
+          detail: "Lists fighters and routes quickly into detail, edit, and delete actions."
+        },
+        {
+          title: "RESTful Integration",
+          detail: "Uses GET/POST/PATCH/DELETE endpoint flows from the UFC backend API."
+        },
+        {
+          title: "Mobile-First UX",
+          detail: "Screen-by-screen flow optimized for handheld CRUD operations."
+        }
+      ]
+    },
+    runtime: {
+      appUrl: "http://localhost:8081",
+      startCommands: [
+        "cd /Users/icepik/dev/ufc-mobile && npm install && npm start"
+      ],
+      notes: "Starts a React Native Metro server for the UFC mobile app (use simulator/device to run)."
+    },
+    testingAccess: {
+      username: "icepikd3v@gmail.com",
+      password: "Admin12345!",
+      scope: "Frontend-only demo login for UFC Mobile when API/auth services are unavailable."
+    },
+    integrationPlaceholders: [
+      "Fighter CRUD can run against local demo data when UFC API is unavailable.",
+      "Live auth and fighter endpoints can be restored later without changing the UI flow.",
+      "Demo mode preserves mobile showcase behavior during backend downtime."
+    ],
+    theme: {
+      accent: "#1e88e5",
+      accentSoft: "#bbdefb",
+      surface: "rgba(13, 18, 28, 0.92)"
     }
   },
   {
@@ -483,9 +583,9 @@ export function findProjectBySlug(slug: string) {
 }
 
 export const portfolioRepoProjectIds = [
-  "pp3-spotify",
+  "icepik-octo-manager",
+  "ufc-mobile",
   "rick-and-morty-react",
-  "icepikd3v-profile",
   "ready-set-travel",
-  "icepik-octo-manager"
+  "pp3-spotify"
 ];

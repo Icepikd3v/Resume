@@ -828,6 +828,27 @@ h1 {
   margin-top: 0.32rem;
 }
 
+.code-block {
+  margin: 0.55rem 0 0.95rem;
+  padding: 0.78rem 0.85rem;
+  border: 1px solid rgba(123, 130, 255, 0.3);
+  border-radius: 0.7rem;
+  background: rgba(9, 14, 36, 0.86);
+  color: #d7e4ff;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  max-width: 100%;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.code-block code {
+  display: block;
+}
+
 .dashboard-form {
   display: grid;
   gap: 0.8rem;

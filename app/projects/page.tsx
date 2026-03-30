@@ -10,8 +10,8 @@ export default function ProjectsIndexPage() {
         <p className="eyebrow">Project Reviews</p>
         <h1>Repository Project Showcases</h1>
         <p className="intro">
-          These pages summarize each project, the implementation stack, documented achievements,
-          and a practical improvement roadmap.
+          These pages summarize implementation details, run commands, and README content.
+          Use each "Open App" link to launch and test the project directly.
         </p>
       </section>
 
@@ -24,11 +24,8 @@ export default function ProjectsIndexPage() {
               <p>{project.summary}</p>
               <p className="muted">{project.stack.join(" • ")}</p>
               <div className="project-links">
-                <Link href={`/projects/${project.slug}/live`} className="inline-link">
-                  Launch Live Showcase
-                </Link>
                 <Link href={`/projects/${project.slug}`} className="inline-link">
-                  Project Info
+                  Open Build Page
                 </Link>
               </div>
             </article>

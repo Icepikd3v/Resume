@@ -2,7 +2,6 @@ import Link from "next/link";
 import { PortraitShowcase } from "@/components/portrait-showcase";
 import { MissionControlWidget } from "@/components/mission-control-widget";
 import { getSiteContent } from "@/lib/content-store";
-import { findProjectBySlug } from "@/lib/resume-data";
 import type { IconType } from "react-icons";
 import {
   SiCss,
@@ -207,10 +206,10 @@ export default async function HomePage() {
               <p className="muted">{project.stack.join(" • ")}</p>
               <div className="project-links">
                 <Link
-                  href={findProjectBySlug(project.slug)?.runtime ? `/projects/${project.slug}/live` : `/projects/${project.slug}`}
+                  href={`/projects/${project.slug}`}
                   className="inline-link"
                 >
-                  Open Project Showcase
+                  Open Build Page
                 </Link>
                 <a href={project.repo}>Repository</a>
               </div>
