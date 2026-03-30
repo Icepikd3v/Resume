@@ -48,12 +48,7 @@ const sharedEnv = {
   ...localEnv,
   PATH: buildPath(),
   SESSION_SECRET: process.env.SESSION_SECRET || "resume-site-dev-session-secret",
-  JWT_SECRET: process.env.JWT_SECRET || "resume-site-dev-jwt-secret",
-  SPOTIFY_CLIENT_ID:
-    process.env.SPOTIFY_CLIENT_ID || localEnv.SPOTIFY_CLIENT_ID || process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID || localEnv.NEXT_PUBLIC_SPOTIFY_CLIENT_ID || "",
-  SPOTIFY_CLIENT_SECRET: process.env.SPOTIFY_CLIENT_SECRET || localEnv.SPOTIFY_CLIENT_SECRET || "",
-  SPOTIFY_REDIRECT_URI:
-    process.env.SPOTIFY_REDIRECT_URI || "http://localhost:3001/auth/callback"
+  JWT_SECRET: process.env.JWT_SECRET || "resume-site-dev-jwt-secret"
 };
 
 const services = [
@@ -66,29 +61,24 @@ const services = [
     port: 3000
   },
   {
-    name: "pp3-server",
-    cwd: "/Users/icepik/dev/pp3-spotify/server",
-    cmd: "npm",
-    args: ["start"],
-    env: { PORT: "3001" },
-    port: 3001,
-    requiredEnv: ["SPOTIFY_CLIENT_ID", "SPOTIFY_CLIENT_SECRET", "SESSION_SECRET", "JWT_SECRET"]
-  },
-  {
-    name: "pp3-client",
-    cwd: "/Users/icepik/dev/pp3-spotify/client/spotify",
-    cmd: "npm",
-    args: ["start"],
-    env: { PORT: "3101", BROWSER: "none" },
-    port: 3101
-  },
-  {
     name: "rick-morty-client",
     cwd: "/Users/icepik/dev/rick-and-morty-react/Client/rick-and-morty-api",
     cmd: "npm",
     args: ["start"],
-    env: { PORT: "3103", BROWSER: "none" },
+    env: {
+      PORT: "3103",
+      BROWSER: "none",
+      REACT_APP_RM_API_URL: "http://localhost:5051/api"
+    },
     port: 3103
+  },
+  {
+    name: "rick-morty-server",
+    cwd: "/Users/icepik/dev/rick-and-morty-react/server",
+    cmd: "npm",
+    args: ["start"],
+    env: { PORT: "5051" },
+    port: 5051
   },
   {
     name: "ready-set-travel",
@@ -103,8 +93,8 @@ const services = [
     cwd: "/Users/icepik/dev/icepik-octo-manager/App/iom-backend",
     cmd: "node",
     args: ["server.js"],
-    env: { PORT: "5000" },
-    port: 5000,
+    env: { PORT: "5052" },
+    port: 5052,
     requiredEnv: ["MONGO_URI"]
   },
   {
@@ -112,8 +102,24 @@ const services = [
     cwd: "/Users/icepik/dev/icepik-octo-manager/App/iom-frontend",
     cmd: "npm",
     args: ["start"],
-    env: { PORT: "3105", BROWSER: "none" },
+    env: { PORT: "3105", BROWSER: "none", REACT_APP_API_BASE_URL: "http://localhost:5052/api" },
     port: 3105
+  },
+  {
+    name: "ufc-backend",
+    cwd: "/Users/icepik/dev/ufc-mobile/server",
+    cmd: "npm",
+    args: ["start"],
+    env: { PORT: "5053" },
+    port: 5053
+  },
+  {
+    name: "ufc-web",
+    cwd: "/Users/icepik/dev/ufc-mobile",
+    cmd: "npm",
+    args: ["run", "web"],
+    env: { CI: "1", EXPO_PUBLIC_UFC_API_URL: "http://localhost:5053/api/v1" },
+    port: 8081
   }
 ];
 

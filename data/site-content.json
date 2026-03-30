@@ -27,19 +27,6 @@
       "category": "hardware"
     },
     {
-      "slug": "pp3-spotify",
-      "name": "pp3-spotify",
-      "summary": "Spotify API app for real-time playlist and artist exploration.",
-      "stack": [
-        "React",
-        "Express",
-        "Spotify API",
-        "MongoDB"
-      ],
-      "repo": "https://github.com/Icepikd3v/pp3-spotify",
-      "category": "api"
-    },
-    {
       "slug": "ufc-api",
       "name": "ufc-api",
       "summary": "RESTful API for UFC event and fighter data, built using JavaScript and Express.",
@@ -241,14 +228,6 @@
     {
       "title": "Icepik's OctoManager Brief Sample",
       "embedUrl": "https://www.youtube.com/embed/7kWzB6CoNBw?si=_sLxajHaAM97-iVv"
-    },
-    {
-      "title": "Spotify Music Search App (pp3-spotify)",
-      "embedUrl": "https://www.youtube.com/embed/PtTNYbZdaSo?si=NRolF4zzR9pktRBx"
-    },
-    {
-      "title": "Spotify Music Search App (pp3-spotify) PT2",
-      "embedUrl": "https://www.youtube.com/embed/t1ljHVm2_eI?si=sYn5DzDQwoZnk45H"
     },
     {
       "title": "UFC-API Mobile",

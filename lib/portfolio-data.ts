@@ -58,14 +58,6 @@ export const projects: Project[] = [
     category: "hardware"
   },
   {
-    slug: "pp3-spotify",
-    name: "pp3-spotify",
-    summary: "Spotify API app for real-time playlist and artist exploration.",
-    stack: ["React", "Express", "Spotify API", "MongoDB"],
-    repo: "https://github.com/Icepikd3v/pp3-spotify",
-    category: "api"
-  },
-  {
     slug: "ufc-api",
     name: "ufc-api",
     summary: "RESTful API for UFC event and fighter data, built using JavaScript and Express.",

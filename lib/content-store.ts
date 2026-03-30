@@ -115,7 +115,6 @@ const fallbackContent: SiteContent = {
   ],
   projectVideos: [
     { title: "Icepik's Octo Manager Brief Sample", embedUrl: "" },
-    { title: "PP3-Spotify Music App", embedUrl: "" },
     { title: "UFC-ApiMobile", embedUrl: "" },
     { title: "Rick and Morty React (Front-End)", embedUrl: "" }
   ],

@@ -6,12 +6,9 @@ type RuntimeOverride = {
 };
 
 const runtimeEnvMap: Record<string, RuntimeOverride> = {
-  "pp3-spotify": {
-    appUrl: process.env.SHOWCASE_PP3_SPOTIFY_URL,
-    backendUrl: process.env.SHOWCASE_PP3_SPOTIFY_API_URL
-  },
   "rick-and-morty-react": {
-    appUrl: process.env.SHOWCASE_RICK_MORTY_URL
+    appUrl: process.env.SHOWCASE_RICK_MORTY_URL,
+    backendUrl: process.env.SHOWCASE_RICK_MORTY_API_URL
   },
   "ready-set-travel": {
     appUrl: process.env.SHOWCASE_READY_SET_TRAVEL_URL
@@ -20,16 +17,20 @@ const runtimeEnvMap: Record<string, RuntimeOverride> = {
     appUrl: process.env.SHOWCASE_OCTO_MANAGER_URL,
     backendUrl: process.env.SHOWCASE_OCTO_MANAGER_API_URL
   },
+  "ufc-api": {
+    appUrl: process.env.SHOWCASE_UFC_MOBILE_URL,
+    backendUrl: process.env.SHOWCASE_UFC_API_URL
+  },
   "icepikd3v-profile": {
     appUrl: process.env.SHOWCASE_ICEPIKD3V_PROFILE_URL
   }
 };
 
 const proxyPathMap: Record<string, string> = {
-  "pp3-spotify": "/showcase/pp3-spotify",
   "rick-and-morty-react": "/showcase/rick-and-morty-react",
   "ready-set-travel": "/showcase/ready-set-travel",
   "icepik-octo-manager": "/showcase/icepik-octo-manager"
+  // ufc mobile remains external because Expo web/devices do not embed reliably in iframe proxy mode.
 };
 
 export function resolveProjectRuntime(project: Project) {

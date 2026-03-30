@@ -55,78 +55,12 @@ export type MediaItem = {
 
 export const projects: Project[] = [
   {
-    id: "pp3-spotify",
-    slug: "pp3-spotify",
-    title: "PP3 Spotify Music Lookup API",
-    summary:
-      "Full-stack Spotify search application using OAuth authentication, React frontend, and Express backend for artist/album/track exploration.",
-    stack: ["React", "Node.js", "Express", "Spotify API", "MongoDB"],
-    domain: ["frontend", "backend", "api", "auth"],
-    sourceUrl: "https://github.com/Icepikd3v/pp3-spotify",
-    documentationPath: "/Users/icepik/dev/pp3-spotify/README.md",
-    highlights: [
-      "Implemented Spotify OAuth login flow and session-based auth handling.",
-      "Built multi-type search results for artists, albums, and tracks.",
-      "Connected a React client with an Express API server for end-to-end functionality.",
-      "Designed a responsive dark-themed UI for desktop and mobile users."
-    ],
-    improvementIdeas: [
-      "Add rate-limit and caching strategy for Spotify API requests.",
-      "Introduce typed API contracts and central error boundaries.",
-      "Add integration tests around auth callback and search endpoints."
-    ],
-    showcase: {
-      hero: "Music discovery with secure Spotify authentication",
-      subhero:
-        "A full-stack build where users authenticate, search artists/albums/tracks, and launch results directly in Spotify.",
-      audience: "Built for music fans who want fast, focused lookup without friction.",
-      featureBlocks: [
-        {
-          title: "OAuth Login",
-          detail: "Implements Spotify authentication flow with secure session handling."
-        },
-        {
-          title: "Search Experience",
-          detail: "Supports artist, album, and track lookups with clear grouped results."
-        },
-        {
-          title: "Split Architecture",
-          detail: "React frontend + Express backend to demonstrate end-to-end integration."
-        }
-      ]
-    },
-    runtime: {
-      appUrl: "http://localhost:3101",
-      backendUrl: "http://localhost:3001",
-      startCommands: [
-        "cd /Users/icepik/dev/pp3-spotify/server && PORT=3001 npm install && PORT=3001 npm start",
-        "cd /Users/icepik/dev/pp3-spotify/client/spotify && PORT=3101 npm install && PORT=3101 npm start"
-      ],
-      notes: "Runs as React frontend + Express backend with Spotify OAuth/API integration."
-    },
-    testingAccess: {
-      username: "icepikd3v@gmail.com",
-      password: "Admin12345!",
-      scope: "Frontend-only demo credentials (local mock search mode) when Spotify/OAuth services are unavailable."
-    },
-    integrationPlaceholders: [
-      "Spotify OAuth callback and API token flows can stay in placeholder/demo mode during downtime.",
-      "Search results can be served from local demo data while backend/API dependencies are offline.",
-      "Live Spotify account authentication should resume once backend secrets and services are restored."
-    ],
-    theme: {
-      accent: "#1db954",
-      accentSoft: "#7fffb4",
-      surface: "rgba(18, 18, 18, 0.92)"
-    }
-  },
-  {
     id: "rick-and-morty-react",
     slug: "rick-and-morty-react",
     title: "Rick and Morty React/Next API Lookup",
     summary:
       "Portfolio project centered on the Rick and Morty API with multi-page routing, animated UI interactions, and persistent user-submitted character data.",
-    stack: ["React", "Next.js", "Tailwind CSS", "Framer Motion", "Howler.js", "LocalStorage"],
+    stack: ["React", "Express", "MongoDB", "Multer", "Framer Motion", "Howler.js"],
     domain: ["frontend", "api", "ui", "student-project"],
     sourceUrl: "https://github.com/Icepikd3v/rick-and-morty-react",
     documentationPath: "/Users/icepik/dev/rick-and-morty-react/README.md",
@@ -134,7 +68,7 @@ export const projects: Project[] = [
       "Structured the application around 4+ pages with routing and distinct user flows.",
       "Integrated Rick and Morty API search and detail exploration features.",
       "Used Framer Motion for animation and Howler.js for audio experience.",
-      "Implemented local persistence for user-submitted character entries."
+      "Implemented server-backed user submissions with image uploads and delete support."
     ],
     improvementIdeas: [
       "Finalize consistent Next.js app structure and deployment config.",
@@ -163,20 +97,22 @@ export const projects: Project[] = [
     },
     runtime: {
       appUrl: "http://localhost:3103",
+      backendUrl: "http://localhost:5051",
       startCommands: [
-        "cd /Users/icepik/dev/rick-and-morty-react/Client/rick-and-morty-api && PORT=3103 npm install && PORT=3103 npm start"
+        "cd /Users/icepik/dev/rick-and-morty-react/server && PORT=5051 npm install && PORT=5051 npm start",
+        "cd /Users/icepik/dev/rick-and-morty-react/Client/rick-and-morty-api && PORT=3103 REACT_APP_RM_API_URL=http://localhost:5051/api npm install && PORT=3103 REACT_APP_RM_API_URL=http://localhost:5051/api npm start"
       ],
-      notes: "Uses Rick and Morty API, framer-motion animations, and howler audio."
+      notes: "Uses a local Express + Mongo backend for auth/submissions and proxies search to Rick and Morty API."
     },
     testingAccess: {
-      username: "icepikd3v@gmail.com",
-      password: "Admin12345!",
-      scope: "Frontend-only demo credentials for safe showcase login."
+      username: "Create account on login screen",
+      password: "User-defined",
+      scope: "Signup/login is handled by local backend auth."
     },
     integrationPlaceholders: [
-      "Rick and Morty API requests gracefully fall back to local demo characters during outages.",
-      "Any unavailable upstream API responses are replaced with placeholder/demo dataset results.",
-      "Live API-backed behavior can be restored later without changing the user flow."
+      "Local character submissions persist in MongoDB and support image upload + delete.",
+      "Search endpoint proxies requests to Rick and Morty public API through local backend.",
+      "Set MONGO_URI for persistent local development data."
     ],
     theme: {
       accent: "#84f729",
@@ -331,22 +267,22 @@ export const projects: Project[] = [
     },
     runtime: {
       appUrl: "http://localhost:3105",
-      backendUrl: "http://localhost:5000",
+      backendUrl: "http://localhost:5052",
       startCommands: [
-        "cd /Users/icepik/dev/icepik-octo-manager/App/iom-backend && PORT=5000 npm install && PORT=5000 node server.js",
+        "cd /Users/icepik/dev/icepik-octo-manager/App/iom-backend && PORT=5052 npm install && PORT=5052 node server.js",
         "cd /Users/icepik/dev/icepik-octo-manager/App/iom-frontend && PORT=3105 npm install && PORT=3105 npm start"
       ],
       notes: "Full-stack app with hardware-oriented OctoPrint workflow integrations."
     },
     testingAccess: {
-      username: "icepikd3v@gmail.com",
-      password: "Admin12345!",
-      scope: "Frontend-only testing credentials for demo access."
+      username: "Create account on signup page",
+      password: "User-defined",
+      scope: "Live auth/profile/upload flows are backed by local MongoDB API."
     },
     integrationPlaceholders: [
-      "OctoPrint webhook URLs can be demo placeholders while printer services are offline.",
-      "API keys and hardware host/IP fields should use placeholder values for public testing.",
-      "Live printer telemetry/actions are expected to remain mocked until hardware is back online."
+      "Profile edits and avatar uploads persist to MongoDB and local uploads directory.",
+      "File uploads and print-job creation flow through backend APIs in live mode.",
+      "Set MONGO_URI and JWT_SECRET in backend env before launching."
     ],
     theme: {
       accent: "#0ea5e9",
@@ -397,20 +333,22 @@ export const projects: Project[] = [
     },
     runtime: {
       appUrl: "http://localhost:8081",
+      backendUrl: "http://localhost:5053",
       startCommands: [
-        "cd /Users/icepik/dev/ufc-mobile && npm install && npm start"
+        "cd /Users/icepik/dev/ufc-mobile/server && PORT=5053 npm install && PORT=5053 npm start",
+        "cd /Users/icepik/dev/ufc-mobile && EXPO_PUBLIC_UFC_API_URL=http://localhost:5053/api/v1 npm install && EXPO_PUBLIC_UFC_API_URL=http://localhost:5053/api/v1 npm run web"
       ],
-      notes: "Starts a React Native Metro server for the UFC mobile app (use simulator/device to run)."
+      notes: "Runs local Express/Mongo API + React Native Expo Web app for full fighter CRUD and auth."
     },
     testingAccess: {
-      username: "icepikd3v@gmail.com",
-      password: "Admin12345!",
-      scope: "Frontend-only demo login for UFC Mobile when API/auth services are unavailable."
+      username: "Create account from Signup screen",
+      password: "User-defined",
+      scope: "All fighter and auth actions run against local backend."
     },
     integrationPlaceholders: [
-      "Fighter CRUD can run against local demo data when UFC API is unavailable.",
-      "Live auth and fighter endpoints can be restored later without changing the UI flow.",
-      "Demo mode preserves mobile showcase behavior during backend downtime."
+      "Set EXPO_PUBLIC_UFC_API_URL for device/emulator host-specific networking.",
+      "Mongo-backed fighter records support create/update/delete per authenticated user.",
+      "Backend health endpoint available at /api/v1/health."
     ],
     theme: {
       accent: "#1e88e5",
@@ -475,7 +413,7 @@ export const languageShowcases: LanguageShowcase[] = [
     strengths: ["React interfaces", "REST fetch layers", "State orchestration", "Runtime validation"],
     sampleTitle: "Dashboard transformer",
     sampleCode: `export const toDashboardCard = (lead) => ({\n  id: lead.id,\n  owner: lead.owner,\n  stage: lead.stage,\n  updatedAt: new Date(lead.updatedAt).toLocaleDateString()\n});`,
-    projectIds: ["pp3-spotify", "rick-and-morty-react", "responsive-ux-panel"]
+    projectIds: ["rick-and-morty-react", "responsive-ux-panel"]
   },
   {
     slug: "python",
@@ -586,6 +524,5 @@ export const portfolioRepoProjectIds = [
   "icepik-octo-manager",
   "ufc-mobile",
   "rick-and-morty-react",
-  "ready-set-travel",
-  "pp3-spotify"
+  "ready-set-travel"
 ];

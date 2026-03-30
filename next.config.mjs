@@ -8,7 +8,6 @@ const nextConfig = {
 
     const routes = [];
     const mapping = [
-      { source: "/showcase/pp3-spotify/:path*", target: process.env.SHOWCASE_PP3_SPOTIFY_URL },
       { source: "/showcase/rick-and-morty-react/:path*", target: process.env.SHOWCASE_RICK_MORTY_URL },
       { source: "/showcase/ready-set-travel/:path*", target: process.env.SHOWCASE_READY_SET_TRAVEL_URL },
       { source: "/showcase/icepik-octo-manager/:path*", target: process.env.SHOWCASE_OCTO_MANAGER_URL }
