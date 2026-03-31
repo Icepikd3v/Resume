@@ -68,3 +68,56 @@ Important: public users cannot access your localhost servers. For visitors to ac
   - headline
   - about text
   - contact emails
+
+## AI Concierge + Contact Agent
+
+A floating AI concierge widget is available on every page.
+
+Features:
+
+- site navigation help
+- weather lookup (`weather in <city>`)
+- timezone lookup (`time in <city>`)
+- trivia questions
+- contact form that forwards messages to `sam.d3v.35@gmail.com`
+
+Configure SMTP in `.env.local` for Contact Agent email forwarding:
+
+```env
+CONTACT_AGENT_TO_EMAIL=sam.d3v.35@gmail.com
+CONTACT_AGENT_SMTP_HOST=smtp.gmail.com
+CONTACT_AGENT_SMTP_PORT=465
+CONTACT_AGENT_SMTP_SECURE=true
+CONTACT_AGENT_SMTP_USER=your-smtp-user@gmail.com
+CONTACT_AGENT_SMTP_PASS=your-app-password
+CONTACT_AGENT_FROM_EMAIL=your-smtp-user@gmail.com
+CONTACT_AGENT_MIN_FILL_MS=3000
+CONTACT_AGENT_RATE_LIMIT_PER_WINDOW=5
+CONTACT_AGENT_RATE_LIMIT_WINDOW_MS=600000
+
+ASSISTANT_RATE_LIMIT_PER_WINDOW=20
+ASSISTANT_RATE_LIMIT_WINDOW_MS=60000
+
+OPENAI_API_KEY=your_openai_api_key
+OPENAI_MODEL=gpt-4o-mini
+AI_CONCIERGE_NAME=Orbit
+AI_CONCIERGE_STYLE=Calm tactical co-pilot
+AI_DEFAULT_REGION_LABEL=West Virginia (East Coast, USA)
+AI_DEFAULT_TIMEZONE=America/New_York
+AI_DEFAULT_CITY=Charleston
+AI_DEFAULT_STATE=WV
+AI_DEFAULT_COUNTRY=USA
+NEXT_PUBLIC_AI_CONCIERGE_NAME=Orbit
+NEXT_PUBLIC_AI_CONCIERGE_STYLE=Calm tactical co-pilot
+NEXT_PUBLIC_AI_CONCIERGE_THEME=mentor
+
+RATE_LIMIT_STORE=upstash
+UPSTASH_REDIS_REST_URL=your_upstash_redis_rest_url
+UPSTASH_REDIS_REST_TOKEN=your_upstash_redis_rest_token
+```
+
+For Gmail, use an App Password (not your normal Gmail password).
+If `OPENAI_API_KEY` is not set, the assistant automatically falls back to local rule-based replies.
+If `RATE_LIMIT_STORE` is not `upstash`, rate limits fall back to in-memory storage.
+Available `NEXT_PUBLIC_AI_CONCIERGE_THEME` presets: `executive`, `creative`, `mentor`.
+Time in West Virginia uses `America/New_York` (EST in winter, EDT in daylight saving time).

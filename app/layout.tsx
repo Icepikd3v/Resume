@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Bebas_Neue, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
+import { AiConciergeWidget } from "@/components/ai-concierge-widget";
 import { getSiteContent } from "@/lib/content-store";
 
 const headline = Bebas_Neue({ subsets: ["latin"], weight: "400", variable: "--font-headline" });
@@ -37,6 +38,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <p className="site-footer-credit">Visual style inspired by Galaxy Dark Mode Crypto UI Dashboard (Community).</p>
           </footer>
         </main>
+        <AiConciergeWidget />
       </body>
     </html>
   );
