@@ -44,6 +44,7 @@ export type SiteContent = {
   tutorialVideos: VideoItem[];
   projectVideos: VideoItem[];
   printTimelapseVideos: VideoItem[];
+  facebookReels: VideoItem[];
 };
 
 const CONTENT_PATH = path.join(process.cwd(), "data", "site-content.json");
@@ -123,7 +124,8 @@ const fallbackContent: SiteContent = {
     { title: "The Thwacker", embedUrl: "" },
     { title: "T-Flex", embedUrl: "" },
     { title: "E3 Farm 1st Year Compilation", embedUrl: "" }
-  ]
+  ],
+  facebookReels: []
 };
 
 function normalizeMedia(input: unknown, fallback: MediaItem[]) {
@@ -213,7 +215,8 @@ export async function getSiteContent(): Promise<SiteContent> {
       liveSites: normalizeLiveSites(parsed.liveSites, fallbackContent.liveSites),
       tutorialVideos: normalizeVideos(parsed.tutorialVideos, fallbackContent.tutorialVideos),
       projectVideos: normalizeVideos(parsed.projectVideos, fallbackContent.projectVideos),
-      printTimelapseVideos: normalizeVideos(parsed.printTimelapseVideos, fallbackContent.printTimelapseVideos)
+      printTimelapseVideos: normalizeVideos(parsed.printTimelapseVideos, fallbackContent.printTimelapseVideos),
+      facebookReels: normalizeVideos(parsed.facebookReels, fallbackContent.facebookReels)
     };
   } catch {
     return fallbackContent;
@@ -267,6 +270,12 @@ export async function saveSiteContent(input: SiteContent): Promise<void> {
       }))
       .filter((video) => video.title),
     printTimelapseVideos: input.printTimelapseVideos
+      .map((video) => ({
+        title: video.title.trim(),
+        embedUrl: video.embedUrl.trim()
+      }))
+      .filter((video) => video.title),
+    facebookReels: (input.facebookReels || [])
       .map((video) => ({
         title: video.title.trim(),
         embedUrl: video.embedUrl.trim()

@@ -255,5 +255,39 @@
       "title": "Icepiks 1st year compilation",
       "embedUrl": "https://www.youtube.com/embed/KmoaSCS27vE?si=xgUs7p7xtvPaQo42"
     }
+  ],
+  "facebookReels": [
+    {
+      "title": "Flexi-Astro",
+      "embedUrl": "<iframe src=\"https://www.facebook.com/plugins/video.php?height=315&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1458405778015615%2F&show_text=false&width=560&t=0\" width=\"560\" height=\"315\" style=\"border:none;overflow:hidden\" scrolling=\"no\" frameborder=\"0\" allowfullscreen=\"true\" allow=\"autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share\" allowFullScreen=\"true\"></iframe>"
+    },
+    {
+      "title": "Flexi-bot",
+      "embedUrl": "<iframe src=\"https://www.facebook.com/plugins/video.php?height=315&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1302745997137911%2F&show_text=false&width=560&t=0\" width=\"560\" height=\"315\" style=\"border:none;overflow:hidden\" scrolling=\"no\" frameborder=\"0\" allowfullscreen=\"true\" allow=\"autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share\" allowFullScreen=\"true\"></iframe>"
+    },
+    {
+      "title": "Flexi-Elephant",
+      "embedUrl": "<iframe src=\"https://www.facebook.com/plugins/video.php?height=315&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F834464027744469%2F&show_text=false&width=560&t=0\" width=\"560\" height=\"315\" style=\"border:none;overflow:hidden\" scrolling=\"no\" frameborder=\"0\" allowfullscreen=\"true\" allow=\"autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share\" allowFullScreen=\"true\"></iframe>"
+    },
+    {
+      "title": "The Thwacker",
+      "embedUrl": "<iframe src=\"https://www.facebook.com/plugins/video.php?height=315&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1807387786267087%2F&show_text=false&width=560&t=0\" width=\"560\" height=\"315\" style=\"border:none;overflow:hidden\" scrolling=\"no\" frameborder=\"0\" allowfullscreen=\"true\" allow=\"autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share\" allowFullScreen=\"true\"></iframe>"
+    },
+    {
+      "title": "Multiverse LithoCube",
+      "embedUrl": "<iframe src=\"https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F902863204453185%2F&show_text=false&width=267&t=0\" width=\"267\" height=\"476\" style=\"border:none;overflow:hidden\" scrolling=\"no\" frameborder=\"0\" allowfullscreen=\"true\" allow=\"autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share\" allowFullScreen=\"true\"></iframe>"
+    },
+    {
+      "title": "Stranger Things LithoCube",
+      "embedUrl": "<iframe src=\"https://www.facebook.com/plugins/video.php?height=476&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F2039961569724650%2F&show_text=false&width=267&t=0\" width=\"267\" height=\"476\" style=\"border:none;overflow:hidden\" scrolling=\"no\" frameborder=\"0\" allowfullscreen=\"true\" allow=\"autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share\" allowFullScreen=\"true\"></iframe>"
+    },
+    {
+      "title": "T-Flex",
+      "embedUrl": "<iframe src=\"https://www.facebook.com/plugins/video.php?height=315&href=https%3A%2F%2Fwww.facebook.com%2Freel%2F1475121022990921%2F&show_text=false&width=560&t=0\" width=\"560\" height=\"315\" style=\"border:none;overflow:hidden\" scrolling=\"no\" frameborder=\"0\" allowfullscreen=\"true\" allow=\"autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share\" allowFullScreen=\"true\"></iframe>"
+    },
+    {
+      "title": "Cheese Doorstop",
+      "embedUrl": "<iframe src=\"https://www.facebook.com/plugins/video.php?height=315&href=https%3A%2F%2Fwww.facebook.com%2Fsam.farmer.7796%2Fvideos%2F1013723119274316%2F&show_text=false&width=560&t=0\" width=\"560\" height=\"315\" style=\"border:none;overflow:hidden\" scrolling=\"no\" frameborder=\"0\" allowfullscreen=\"true\" allow=\"autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share\" allowFullScreen=\"true\"></iframe>"
+    }
   ]
 }

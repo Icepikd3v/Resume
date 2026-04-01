@@ -526,6 +526,95 @@ h1 {
   scroll-margin-top: 6rem;
 }
 
+.reel-links-wrap {
+  margin-top: 0.8rem;
+}
+
+.reel-links-list {
+  list-style: decimal;
+  margin: 0;
+  padding: 0 0 0 1.2rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.reel-links-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.7rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: 0.62rem;
+  border: 1px solid rgba(121, 185, 255, 0.2);
+  background: linear-gradient(145deg, rgba(13, 20, 50, 0.66), rgba(8, 13, 36, 0.62));
+}
+
+.compact-reel-list {
+  padding-left: 1.1rem;
+}
+
+.reel-list-left {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.reel-dot {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #d9e8ff;
+  border: 1px solid rgba(121, 185, 255, 0.36);
+  background: radial-gradient(circle at 25% 20%, rgba(121, 185, 255, 0.3), rgba(8, 15, 42, 0.92));
+  flex-shrink: 0;
+}
+
+.reel-meta {
+  min-width: 0;
+}
+
+.reel-title {
+  margin: 0;
+  font-weight: 600;
+  color: #dce8ff;
+  line-height: 1.25;
+}
+
+.reel-id {
+  margin: 0.1rem 0 0;
+  font-size: 0.76rem;
+  color: #9fb5df;
+}
+
+.reel-inline-link {
+  color: #9ec8ff;
+  text-decoration: none;
+  border: 1px solid rgba(121, 185, 255, 0.34);
+  background: rgba(9, 16, 42, 0.7);
+  border-radius: 999px;
+  padding: 0.22rem 0.6rem;
+  font-size: 0.84rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.reel-inline-link:hover {
+  border-color: rgba(121, 185, 255, 0.6);
+  color: #dcecff;
+}
+
+@media (max-width: 719px) {
+  .reel-links-item {
+    padding: 0.52rem 0.58rem;
+  }
+}
+
 .photo-grid {
   display: grid;
   gap: 1rem;

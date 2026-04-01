@@ -39,6 +39,7 @@ export async function POST(req: Request) {
     !Array.isArray(body?.tutorialVideos) ||
     !Array.isArray(body?.projectVideos) ||
     !Array.isArray(body?.printTimelapseVideos) ||
+    !Array.isArray(body?.facebookReels) ||
     !body?.socialLinks?.github ||
     !body?.socialLinks?.linkedin
   ) {

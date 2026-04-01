@@ -3,6 +3,54 @@ import { getSiteContent } from "@/lib/content-store";
 
 export const dynamic = "force-dynamic";
 
+function decodeHtmlEntities(input: string) {
+  return input
+    .replace(/&amp;/g, "&")
+    .replace(/&#x2F;/gi, "/")
+    .replace(/&#47;/g, "/");
+}
+
+function extractAttribute(input: string, attribute: string) {
+  const match = input.match(new RegExp(`${attribute}\\s*=\\s*["']([^"']+)["']`, "i"));
+  return match?.[1] ? decodeHtmlEntities(match[1]).trim() : "";
+}
+
+function extractFacebookReelUrl(input: string) {
+  const normalized = input.trim();
+  if (!normalized) return "";
+
+  const source =
+    normalized.startsWith("<")
+      ? extractAttribute(normalized, "src") || extractAttribute(normalized, "data-href") || extractAttribute(normalized, "href")
+      : decodeHtmlEntities(normalized);
+
+  if (!source) return "";
+
+  try {
+    const url = new URL(source);
+    if (!url.hostname.includes("facebook.com")) return "";
+
+    if (url.pathname.includes("/plugins/video.php")) {
+      const href = url.searchParams.get("href");
+      return href ? decodeHtmlEntities(href) : "";
+    }
+
+    return url.toString();
+  } catch {
+    return source.includes("facebook.com") ? source : "";
+  }
+}
+
+function extractFacebookReelId(input: string) {
+  const reelUrl = extractFacebookReelUrl(input);
+  const match = reelUrl.match(/\/reel\/(\d+)/i);
+  if (match?.[1]) return match[1];
+
+  const videoMatch = reelUrl.match(/\/videos\/(\d+)/i);
+  if (videoMatch?.[1]) return videoMatch[1];
+  return "";
+}
+
 export default async function S3DPrintProcessingPage() {
   const content = await getSiteContent();
   return (
@@ -30,6 +78,43 @@ export default async function S3DPrintProcessingPage() {
               <figcaption>{image.label}</figcaption>
             </figure>
           ))}
+        </div>
+      </section>
+
+      <section className="panel">
+        <h2>Facebook Reels Showcase</h2>
+        <p className="section-lead">
+          A direct list of 3D printing reels. Click any item to view on Facebook.
+        </p>
+        <div className="reel-links-wrap">
+          {content.facebookReels.length === 0 ? (
+            <p className="muted">No Facebook Reels added yet.</p>
+          ) : (
+            <ol className="reel-links-list compact-reel-list">
+              {content.facebookReels.map((reel) => {
+                const reelUrl = extractFacebookReelUrl(reel.embedUrl);
+                const reelId = extractFacebookReelId(reel.embedUrl);
+                return (
+                  <li key={reel.title} className="reel-links-item">
+                    <div className="reel-list-left">
+                      <span className="reel-dot" aria-hidden="true">FB</span>
+                      <div className="reel-meta">
+                        <p className="reel-title">{reel.title}</p>
+                        {reelId ? <p className="reel-id">Reel ID: {reelId}</p> : null}
+                      </div>
+                    </div>
+                    {reelUrl ? (
+                      <a href={reelUrl} target="_blank" rel="noreferrer" className="reel-inline-link">
+                        View
+                      </a>
+                    ) : (
+                      <p className="muted">Invalid or missing reel link</p>
+                    )}
+                  </li>
+                );
+              })}
+            </ol>
+          )}
         </div>
       </section>
     </div>

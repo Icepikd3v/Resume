@@ -44,6 +44,7 @@ type SiteContent = {
   tutorialVideos: VideoItem[];
   projectVideos: VideoItem[];
   printTimelapseVideos: VideoItem[];
+  facebookReels: VideoItem[];
 };
 
 type ProjectDraft = {
@@ -56,7 +57,7 @@ type ProjectDraft = {
 };
 
 type MediaGroup = "portraits" | "printGallery";
-type VideoGroup = "tutorialVideos" | "projectVideos" | "printTimelapseVideos";
+type VideoGroup = "tutorialVideos" | "projectVideos" | "printTimelapseVideos" | "facebookReels";
 
 type ListKey =
   | "portraits"
@@ -65,7 +66,8 @@ type ListKey =
   | "liveSites"
   | "tutorialVideos"
   | "projectVideos"
-  | "printTimelapseVideos";
+  | "printTimelapseVideos"
+  | "facebookReels";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -76,7 +78,8 @@ const INITIAL_SECTION_PAGES: Record<ListKey, number> = {
   liveSites: 1,
   tutorialVideos: 1,
   projectVideos: 1,
-  printTimelapseVideos: 1
+  printTimelapseVideos: 1,
+  facebookReels: 1
 };
 
 const defaultContent: SiteContent = {
@@ -95,7 +98,8 @@ const defaultContent: SiteContent = {
   liveSites: [],
   tutorialVideos: [],
   projectVideos: [],
-  printTimelapseVideos: []
+  printTimelapseVideos: [],
+  facebookReels: []
 };
 
 function normalizeContent(raw: Partial<SiteContent>): SiteContent {
@@ -115,7 +119,8 @@ function normalizeContent(raw: Partial<SiteContent>): SiteContent {
     liveSites: Array.isArray(raw.liveSites) ? raw.liveSites : [],
     tutorialVideos: Array.isArray(raw.tutorialVideos) ? raw.tutorialVideos : [],
     projectVideos: Array.isArray(raw.projectVideos) ? raw.projectVideos : [],
-    printTimelapseVideos: Array.isArray(raw.printTimelapseVideos) ? raw.printTimelapseVideos : []
+    printTimelapseVideos: Array.isArray(raw.printTimelapseVideos) ? raw.printTimelapseVideos : [],
+    facebookReels: Array.isArray(raw.facebookReels) ? raw.facebookReels : []
   };
 }
 
@@ -240,7 +245,8 @@ export default function DashboardPage() {
       liveSites: content.liveSites.length,
       tutorialVideos: content.tutorialVideos.length,
       projectVideos: content.projectVideos.length,
-      printTimelapseVideos: content.printTimelapseVideos.length
+      printTimelapseVideos: content.printTimelapseVideos.length,
+      facebookReels: content.facebookReels.length
     }),
     [
       content.portraits.length,
@@ -249,7 +255,8 @@ export default function DashboardPage() {
       content.liveSites.length,
       content.tutorialVideos.length,
       content.projectVideos.length,
-      content.printTimelapseVideos.length
+      content.printTimelapseVideos.length,
+      content.facebookReels.length
     ]
   );
 
@@ -328,7 +335,8 @@ export default function DashboardPage() {
       printTimelapseVideos: Math.min(
         prev.printTimelapseVideos,
         Math.max(1, Math.ceil(listSizes.printTimelapseVideos / ITEMS_PER_PAGE))
-      )
+      ),
+      facebookReels: Math.min(prev.facebookReels, Math.max(1, Math.ceil(listSizes.facebookReels / ITEMS_PER_PAGE)))
     }));
   }, [listSizes]);
 
@@ -629,6 +637,7 @@ export default function DashboardPage() {
   const videoGroupLabel = (group: VideoGroup) => {
     if (group === "tutorialVideos") return "Tutorial / Learning";
     if (group === "projectVideos") return "Project Videos";
+    if (group === "facebookReels") return "Facebook Reel";
     return "3D Print Timelapse";
   };
 
@@ -739,6 +748,7 @@ export default function DashboardPage() {
 
   const renderVideoPanel = (group: VideoGroup, heading: string, newLabel: string) => {
     const page = paginateItems(group, content[group]);
+    const isFacebookGroup = group === "facebookReels";
 
     return (
       <section className="panel">
@@ -749,7 +759,7 @@ export default function DashboardPage() {
           ) : (
             page.pageItems.map((video, index) => {
               const globalIndex = page.startIndex + index;
-              const thumb = getYouTubeThumbnail(video.embedUrl);
+              const thumb = isFacebookGroup ? null : getYouTubeThumbnail(video.embedUrl);
 
               return (
                 <article key={`${video.title}-${globalIndex}`} className="dashboard-item dashboard-list-row compact-row">
@@ -795,11 +805,11 @@ export default function DashboardPage() {
                 />
               </label>
               <label>
-                YouTube Embed URL
+                {isFacebookGroup ? "Reel URL or Facebook Embed Code" : "YouTube Embed URL"}
                 <input
                   value={videoDraft.embedUrl}
                   onChange={(e) => setVideoDraft((prev) => ({ ...prev, embedUrl: e.target.value }))}
-                  placeholder="https://www.youtube.com/embed/..."
+                  placeholder={isFacebookGroup ? "https://www.facebook.com/reel/... or <iframe ...>" : "https://www.youtube.com/embed/..."}
                 />
               </label>
             </div>
@@ -1086,6 +1096,8 @@ export default function DashboardPage() {
           {renderVideoPanel("projectVideos", "Project Videos", "New Project Video")}
 
           {renderVideoPanel("printTimelapseVideos", "3D Print Timelapse Videos", "New Timelapse Video")}
+
+          {renderVideoPanel("facebookReels", "Facebook Reels (3D Printing)", "New Facebook Reel")}
 
           <section className="panel">
             <h2>3D Print Media</h2>
