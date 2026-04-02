@@ -46,6 +46,11 @@ export default async function ProjectPage({ params }: Props) {
   const runtimeCommands = runtime?.startCommands.map((command) => sanitizeLocalPaths(command)) ?? [];
   const readme = detailedProject ? await loadProjectReadme(detailedProject.documentationPath) : null;
   const showcase = detailedProject?.showcase;
+  const runtimeAppUrl = runtime?.appUrl;
+  const runtimeIsInternalLab = Boolean(runtimeAppUrl?.startsWith("/projects/") && runtimeAppUrl.endsWith("/live"));
+  const runtimeIsRepoFallback = Boolean(runtimeAppUrl && project.repo && runtimeAppUrl === project.repo);
+  const showAppLink = Boolean(runtimeAppUrl && !runtimeIsRepoFallback);
+  const runtimeLabel = "Open App";
 
   return (
     <div className="page-shell">
@@ -56,18 +61,23 @@ export default async function ProjectPage({ params }: Props) {
         <p className="muted">{project.stack.join(" • ")}</p>
         <div className="project-links">
           {project.repo ? <a href={project.repo}>Open Repository</a> : null}
-          {runtime ? (
-            <a href={runtime.appUrl} target="_blank" rel="noreferrer">
-              Open Full App (Local)
+          {showAppLink ? (
+            <a href={runtimeAppUrl} target="_blank" rel="noreferrer">
+              {runtimeLabel}
             </a>
           ) : null}
           <Link href="/" className="inline-link">
             Back to Resume Site
           </Link>
         </div>
-        {runtime ? (
+        {runtimeIsRepoFallback ? (
           <p className="muted">
-            If the local app does not open, run the start commands below first (or run <code>npm run dev</code> from the resume-site root).
+            No deployed app URL is configured yet for this project. Add a public <code>SHOWCASE_*</code> URL to enable one-click app launch here.
+          </p>
+        ) : null}
+        {runtimeIsInternalLab ? (
+          <p className="muted">
+            Unified mode is enabled: this project opens in an integrated live lab route inside resume-site so everything ships in one deployment.
           </p>
         ) : null}
       </section>
