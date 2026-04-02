@@ -6,11 +6,11 @@ type RuntimeOverride = {
 };
 
 const LOCAL_HOSTS = new Set(["localhost", "127.0.0.1", "0.0.0.0"]);
-const internalLabPathMap: Record<string, string> = {
-  "icepik-octo-manager": "/projects/icepik-octo-manager/live",
-  "ufc-api": "/projects/ufc-api/live",
-  "rick-and-morty-react": "/projects/rick-and-morty-react/live",
-  "ready-set-travel": "/projects/ready-set-travel/live"
+const internalAppPathMap: Record<string, string> = {
+  "icepik-octo-manager": "/showcase-app/icepik-octo-manager",
+  "ufc-api": "/showcase-app/ufc-api",
+  "rick-and-morty-react": "/showcase-app/rick-and-morty-react",
+  "ready-set-travel": "/showcase-app/ready-set-travel"
 };
 const productionRuntimeFallbacks: Record<string, string> = {
   "rick-and-morty-react": "https://rick-and-morty-react.netlify.app",
@@ -46,7 +46,7 @@ const proxyPathMap: Record<string, string> = {
   // ufc mobile remains external because Expo web/devices do not embed reliably in iframe proxy mode.
 };
 
-export function resolveProjectRuntime(project: Project) {
+export function resolveProjectRuntime(project: Project, options?: { preferInternalLabs?: boolean }) {
   const fallback = project.runtime;
   if (!fallback) return undefined;
 
@@ -54,11 +54,11 @@ export function resolveProjectRuntime(project: Project) {
   const nextAppUrl = override?.appUrl || fallback.appUrl;
   const nextBackendUrl = override?.backendUrl || fallback.backendUrl;
   const isProduction = process.env.NODE_ENV === "production";
-  const useInternalLabs = shouldUseInternalLabs();
-  const internalLabUrl = internalLabPathMap[project.slug];
+  const useInternalApps = options?.preferInternalLabs ?? shouldUseInternalApps();
+  const internalAppUrl = internalAppPathMap[project.slug];
   const resolvedAppUrl =
-    useInternalLabs && internalLabUrl
-      ? internalLabUrl
+    useInternalApps && internalAppUrl
+      ? internalAppUrl
       : isProduction && isLocalRuntimeUrl(nextAppUrl)
       ? productionRuntimeFallbacks[project.slug] || project.liveUrl || project.sourceUrl || nextAppUrl
       : nextAppUrl;
@@ -94,7 +94,9 @@ export function isLocalRuntimeUrl(url?: string) {
   }
 }
 
-function shouldUseInternalLabs() {
+function shouldUseInternalApps() {
+  if (process.env.SHOWCASE_USE_INTERNAL_APPS === "true") return true;
+  if (process.env.SHOWCASE_USE_INTERNAL_APPS === "false") return false;
   if (process.env.SHOWCASE_USE_INTERNAL_LABS === "true") return true;
   if (process.env.SHOWCASE_USE_INTERNAL_LABS === "false") return false;
   return process.env.NODE_ENV === "production";

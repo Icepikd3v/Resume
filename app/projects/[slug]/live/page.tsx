@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { findProjectBySlug, findProjectsByIds, portfolioRepoProjectIds } from "@/lib/resume-data";
 import { getProjectLiveLab } from "@/lib/project-live-lab";
 import { loadProjectReadme } from "@/lib/readme-loader";
+import { resolveProjectEmbedUrl, resolveProjectRuntime } from "@/lib/showcase-runtime";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -42,6 +43,10 @@ export default async function ProjectLiveShowcasePage({ params }: Props) {
   const project = resolveShowcaseProject(slug);
   const liveLab = project ? getProjectLiveLab(project.slug) : null;
   const readme = project ? await loadProjectReadme(project.documentationPath) : null;
+  const runtime = project ? resolveProjectRuntime(project, { preferInternalLabs: false }) : null;
+  const appUrl = runtime?.appUrl || "";
+  const embedUrl = project && appUrl ? resolveProjectEmbedUrl(project, appUrl) : "";
+  const hasEmbeddableRuntime = Boolean(embedUrl && !isKnownNonEmbeddableUrl(embedUrl));
 
   if (!project || !project.showcase || !liveLab) {
     notFound();
@@ -50,11 +55,16 @@ export default async function ProjectLiveShowcasePage({ params }: Props) {
   return (
     <div className="page-shell">
       <section className="panel hero">
-        <p className="eyebrow">Unified Live Lab</p>
+        <p className="eyebrow">Live App</p>
         <h1>{project.title}</h1>
         <p className="intro">{project.showcase.subhero}</p>
         <p className="muted">{project.stack.join(" • ")}</p>
         <div className="project-links">
+          {appUrl ? (
+            <a href={appUrl} target="_blank" rel="noreferrer">
+              Open In New Tab
+            </a>
+          ) : null}
           {project.sourceUrl ? (
             <a href={project.sourceUrl} target="_blank" rel="noreferrer">
               Open Repository
@@ -64,10 +74,28 @@ export default async function ProjectLiveShowcasePage({ params }: Props) {
             Back To Build Page
           </Link>
         </div>
-        <p className="muted">
-          Pulled into resume-site on <code>{liveLab.importedAt}</code> so project walkthrough and implementation references
-          can ship under one deployment.
-        </p>
+        {!appUrl ? (
+          <p className="muted">
+            No runtime URL is configured yet for this project. Add a public <code>SHOWCASE_*</code> URL to load the live app here.
+          </p>
+        ) : null}
+      </section>
+
+      <section className="panel">
+        <h2>App Runtime</h2>
+        {hasEmbeddableRuntime ? (
+          <iframe
+            className="live-app-frame"
+            src={embedUrl}
+            title={`${project.title} live app`}
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
+        ) : (
+          <p className="muted">
+            This target blocks iframe embedding or is not configured for in-page playback. Use <code>Open In New Tab</code> to launch the app directly.
+          </p>
+        )}
       </section>
 
       <section className="panel">
@@ -115,4 +143,8 @@ export default async function ProjectLiveShowcasePage({ params }: Props) {
       ) : null}
     </div>
   );
+}
+
+function isKnownNonEmbeddableUrl(url: string) {
+  return /github\.com|raw\.githubusercontent\.com/.test(url);
 }

@@ -36,27 +36,41 @@ Set `MONGO_URI` in `.env.local` so the Octo backend can connect to MongoDB.
 
 ## Project Embeds Inside Resume Site
 
-Project iframes can route through local paths like `/showcase/icepik-octo-manager`.
+`Open App` uses `/projects/[slug]/live` and attempts to load each app runtime in-page (iframe) with an external-tab fallback.
 
 Configure in `.env.local`:
 
 ```env
 SHOWCASE_PROXY_ENABLED=true
+SHOWCASE_USE_INTERNAL_LABS=true
+
 SHOWCASE_OCTO_MANAGER_URL=http://localhost:3105
-SHOWCASE_OCTO_MANAGER_API_URL=http://localhost:5000
+SHOWCASE_OCTO_MANAGER_API_URL=http://localhost:5052
+SHOWCASE_RICK_MORTY_URL=http://localhost:3103
+SHOWCASE_RICK_MORTY_API_URL=http://localhost:5051
+SHOWCASE_READY_SET_TRAVEL_URL=http://localhost:3104
+SHOWCASE_UFC_MOBILE_URL=http://localhost:8081
+SHOWCASE_UFC_API_URL=http://localhost:5053/api/v1
 ```
 
-You can also set deployed URLs for public browsing:
+Set the same variables in Vercel for `Production`, `Preview`, and `Development`.
+Current known public values:
 
 ```env
-SHOWCASE_RICK_MORTY_URL=
-SHOWCASE_READY_SET_TRAVEL_URL=
+SHOWCASE_PROXY_ENABLED=true
+SHOWCASE_USE_INTERNAL_LABS=true
+
+SHOWCASE_RICK_MORTY_URL=https://rick-and-morty-react.netlify.app
+SHOWCASE_READY_SET_TRAVEL_URL=https://cdn.jsdelivr.net/gh/Icepikd3v/ReadySetTravel@main/dev/readysettravel/index.html
+
+# set these once deployed publicly
 SHOWCASE_OCTO_MANAGER_URL=
 SHOWCASE_OCTO_MANAGER_API_URL=
-SHOWCASE_ICEPIKD3V_PROFILE_URL=
+SHOWCASE_UFC_MOBILE_URL=
+SHOWCASE_UFC_API_URL=
 ```
 
-Important: public users cannot access your localhost servers. For visitors to actively use each app, each project must be deployed to a public URL, then mapped with those env vars.
+Important: if an app URL is empty or points to localhost in production, visitors cannot run that app. The live page will show fallback guidance until a public URL is provided.
 
 ## Dashboard
 

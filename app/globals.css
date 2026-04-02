@@ -938,6 +938,85 @@ h1 {
   display: block;
 }
 
+.live-app-frame {
+  width: 100%;
+  min-height: 76vh;
+  border: 1px solid rgba(123, 130, 255, 0.3);
+  border-radius: 0.7rem;
+  background: rgba(6, 10, 28, 0.92);
+}
+
+.showcase-app-shell {
+  display: grid;
+  gap: 1rem;
+}
+
+.showcase-app-header h1 {
+  margin-bottom: 0.35rem;
+  font-size: clamp(1.6rem, 4.4vw, 2.6rem);
+}
+
+.showcase-app-body {
+  display: grid;
+  gap: 1rem;
+}
+
+.showcase-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.showcase-nav span {
+  border: 1px solid rgba(123, 130, 255, 0.32);
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+  color: #9ec8ff;
+  background: rgba(9, 14, 36, 0.9);
+}
+
+.showcase-hero-banner {
+  border: 1px solid rgba(123, 130, 255, 0.3);
+  border-radius: 0.8rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, rgba(11, 19, 46, 0.95), rgba(8, 15, 39, 0.85));
+}
+
+.showcase-hero-banner h2 {
+  margin: 0 0 0.35rem;
+}
+
+.showcase-form-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.6rem;
+}
+
+.showcase-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.showcase-form-row input,
+.showcase-form-grid input {
+  width: 100%;
+  border: 1px solid rgba(123, 130, 255, 0.34);
+  background: rgba(10, 15, 40, 0.9);
+  color: var(--text-main);
+  border-radius: 0.62rem;
+  padding: 0.62rem 0.72rem;
+  font: inherit;
+}
+
+.showcase-avatar {
+  width: 100%;
+  max-width: 180px;
+  border-radius: 0.6rem;
+  border: 1px solid rgba(123, 130, 255, 0.28);
+}
+
 .dashboard-form {
   display: grid;
   gap: 0.8rem;
