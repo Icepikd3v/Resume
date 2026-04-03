@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/embedded/rick-and-morty-react/static/css/main.84cf82e2.css",
+    "main.js": "/embedded/rick-and-morty-react/static/js/main.da09bea2.js",
+    "static/js/453.abed986a.chunk.js": "/embedded/rick-and-morty-react/static/js/453.abed986a.chunk.js",
+    "static/media/Music.mp3": "/embedded/rick-and-morty-react/static/media/Music.27335c7055579dc990ec.mp3",
+    "static/media/AboutRicknMorty.png": "/embedded/rick-and-morty-react/static/media/AboutRicknMorty.0b01774cd28eb21d6d4d.png",
+    "static/media/Portal.png": "/embedded/rick-and-morty-react/static/media/Portal.08f0303c836424a73b69.png",
+    "static/media/Shape4.png": "/embedded/rick-and-morty-react/static/media/Shape4.5a1f55c631b9d2ed55c0.png",
+    "static/media/background.jpg": "/embedded/rick-and-morty-react/static/media/background.2141e77d6b5eac3b45c8.jpg",
+    "static/media/Logo.png": "/embedded/rick-and-morty-react/static/media/Logo.3ca11aba93e458352f4b.png",
+    "index.html": "/embedded/rick-and-morty-react/index.html",
+    "main.84cf82e2.css.map": "/embedded/rick-and-morty-react/static/css/main.84cf82e2.css.map",
+    "main.da09bea2.js.map": "/embedded/rick-and-morty-react/static/js/main.da09bea2.js.map",
+    "453.abed986a.chunk.js.map": "/embedded/rick-and-morty-react/static/js/453.abed986a.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.84cf82e2.css",
+    "static/js/main.da09bea2.js"
+  ]
+}

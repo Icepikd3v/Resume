@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-labelledby="title desc">
+  <title id="title">Demo Avatar</title>
+  <desc id="desc">Placeholder avatar for offline demo mode</desc>
+  <rect width="200" height="200" rx="100" fill="#d1d5db" />
+  <circle cx="100" cy="76" r="34" fill="#9ca3af" />
+  <path d="M40 170c7-29 33-47 60-47s53 18 60 47" fill="#9ca3af" />
+</svg>

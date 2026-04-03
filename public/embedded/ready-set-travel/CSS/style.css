@@ -1,0 +1,537 @@
+
+/*NAV*/
+header {
+  width: 100%;
+  height: 10%;
+  background-color: #345cd7;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+.topbutton
+{
+  background-color: #EE8A5A;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+/*Hero*/
+.bigpicture
+{
+  width:100%;
+}
+
+.bannerimg
+{
+  width:2400px;
+  height:400px;
+}
+
+.textoverlay
+{
+  text-align: left;
+  position: absolute;
+  top: 30%;
+  left: 30%;
+  transform: translate(-50%, -50%);
+  color: white;
+}
+
+.text-overlay
+{  
+    position: relative;
+    left: 65%;
+    transform: translate(-50%, -50%);
+    font-size: 48px;
+    color: azure;
+    font-family: 'Abril Fatface', cursive;
+    
+  }
+
+.text-overlay2 
+{
+    position: relative;
+    left: 65%;
+    transform: translate(-50%, -50%);
+    font-size: 1.25rem;
+    color:azure;
+    font-family: 'Roboto', sans-serif;  
+}
+
+/*Responsiveness for Hero Text*/
+@media screen and (max-width: 800px) 
+{
+  .textoverlay{
+  text-align: left;
+  position: absolute;
+  top: 50%;
+  left: 30%;
+  transform: translate(-50%, -50%);
+  color: white;
+  }
+}
+
+/*SearchBar*/
+.box
+{
+  margin:5%;
+  width:90%;
+  text-align:center;
+  padding-left:25px;
+  padding-right: 50px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: inline-block; 
+  border-width:1px;
+  border-style:solid;
+  border-color:#0f0f0f;
+  background:#587C93;
+}
+
+.input-box 
+{
+  margin:5%;
+  min-width: 100px;
+  text-align:center;
+  display: flex;
+}
+
+.searchtitle
+{
+width: 100%;
+text-align: center;
+color:#FFFFFF;
+font-size:3rem;
+font-family: 'Abril Fatface', cursive;
+}
+
+.searchbar
+{
+  height:25px;
+  width: 100%;
+  padding:30px;
+  margin:auto;
+}
+
+/*Trending Tours*/
+.Trending{
+background-color: #e7ecf3;
+margin:auto;
+padding: 50px 10px;
+}
+
+
+h1 
+{
+  color:#222222;
+  text-align:center;
+  margin:auto;
+  font-size:3rem;
+  font-family: 'Abril Fatface', cursive;
+}
+
+.trendingtours
+{
+position: relative;
+width: 100%;
+font-size:3rem;
+display:inline-block;
+font-family: 'Abril Fatface', cursive;
+}
+
+.trendingtoursunderquote
+{
+  position: relative;
+  width: 100%;
+  font-family: 'Roboto', sans-serif;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 1.25rem;
+  line-height: 32px;
+  text-align: center;
+  color: #666666;
+}
+
+
+.imagetitle
+{
+position: relative;
+font-family: 'Roboto', sans-serif;
+font-weight: 700;
+font-size: 16px;
+color: #0B0C25;
+text-align:center;
+margin:auto;
+}
+
+.priceandbutton
+{
+  padding:8px 8px;
+}
+
+.price 
+{
+margin:auto;
+width:20%;
+position: relative;
+font-family: 'Roboto', sans-serif;
+font-weight: 700;
+color: #0B0C25;
+font-size:1.5rem;
+}
+
+.pricebutton
+{
+    margin:auto;
+    display: inline-block;
+    width: 100%;
+    height:50px;
+    background-color: #EE8A5A;
+    color: white;
+    text-align: center;
+    font-size: 22px;
+    cursor: pointer;
+  } 
+
+  /*Responsiveness for book now button*/
+  @media screen and (max-width: 600px) 
+  {
+    .pricebutton {
+    margin:auto;
+    display: inline-block;
+    width: 100%;
+    height:60px;
+    background-color: #EE8A5A;
+    color: white;
+    text-align: center;
+    font-size: 22px;
+    cursor: pointer;
+    }
+  }
+  
+ 
+/*Planning Perfect trip*/
+.planning
+{
+position: relative;
+width: 100%;
+margin:auto;
+padding:10px 5px;
+display:inline-block;
+}
+
+.perfecttrip
+{
+position: relative;
+width: 100%;
+font-size:3rem;
+font-family: 'Abril Fatface', cursive;
+color: #222222;
+}
+
+.perfecttripunder
+{
+  font-family: 'Roboto', sans-serif;
+  position: absolute;
+  width:100%;
+  font-size: 1.25rem;
+  text-align: center;
+  color: #666666;
+  margin:auto;
+  padding: 0px 8px;
+}
+
+.icon
+{ 
+  width:45%;
+  margin:40px 250px;
+  text-align:right;
+  display: flex;
+  padding: 0 8px; 
+}
+
+figcaption
+{
+  text-align: center;
+}
+
+.flights
+{
+margin:auto;
+position: relative;
+width: 20%;
+font-family: 'Roboto', sans-serif;
+color: #0B0C25;
+}
+
+.transportaion
+{
+  margin:auto;
+  position: relative;
+  width: 20%;
+  font-family: 'Roboto', sans-serif;
+  color: #0B0C25;
+}
+
+.guides
+{
+  margin: auto;
+  position: relative;
+  width: 20%;
+  font-family: 'Roboto', sans-serif;
+  color: #0B0C25;
+}
+/*Responsiveness implemented for icons*/
+@media screen and (min-width: 1200px) 
+{
+  .icon {
+    width:70%;
+    display: flex;
+    margin-bottom: 20px;
+  }
+}
+@media screen and (max-width: 800px) 
+{
+  .icon {
+    width:100%;
+    margin:auto;
+    padding: 50px;
+  }
+}
+@media screen and (min-width: 1200px) 
+{
+  .icon {
+    width:25%;
+    margin:auto;
+    padding: 40px;
+  }
+}
+
+/*Top Destinations (Including Image Grid)*/
+.Top
+{
+  position: relative;
+  width: 100%;
+  font-size:3rem;
+  font-family: 'Abril Fatface', cursive;
+  color: #222222;
+  margin-top: 20px;
+}
+.Topunder
+{
+  font-family: 'Roboto', sans-serif;
+  position: absolute;
+  width:100%;
+  font-size: 1.25rem;
+  text-align: center;
+  color: #666666;
+  margin:10px;
+  padding: 0px 8px;
+}
+.travelheading
+{
+  font-family: 'Abril Fatface', cursive;
+  color: #222222;
+}
+.travelfont{
+  font-family: 'Abril Fatface', cursive;
+  color: #222222;
+}
+
+/* Secondary Page (About) Styling */
+.logo
+{
+width:400px;
+height:600px;
+padding:0 20px;
+margin:auto;
+margin-top:5%;
+}
+
+@media screen and (max-width: 600px) 
+{
+  .logo {
+    margin:5%;
+  }
+}
+
+.aboutp
+{
+font-family: 'Roboto', sans-serif;
+font-size: 1rem;
+line-height: 90px;
+padding:8px 8px;
+color: #0B0C25;
+text-align:center;
+margin:auto;
+}
+
+@media screen and (max-width: 600px) 
+{
+  .aboutp {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    line-height: 90px;
+    padding:8px 8px;
+    color: #0B0C25;
+    text-align:center;
+    margin:auto;
+  }
+}
+/*TopDestinations Page*/
+
+.TopNotch
+{
+  margin:2%;
+}
+
+.SpanD
+{
+position: relative;
+width: 100%;
+font-size:3rem;
+font-family: 'Abril Fatface', cursive;
+color: #222222;
+}
+
+.ColumnD 
+{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin:10%;
+  padding:0 8px;
+
+}
+
+.Destination 
+{
+  flex-basis: 40%
+}
+.Text {
+  text-align: left;
+  font-size: 20px;
+  padding-left: 20px;
+}
+.Dtitle{
+font-size:3rem;
+font-family: 'Abril Fatface', cursive;
+color: #222222;
+}
+.Dpara{
+  font-family: 'Roboto', sans-serif;
+  font-size: 1rem;
+  padding:10px 20px;
+  margin:auto;
+}
+
+
+/*Tours page
+
+
+*/
+/*Blogs*/
+
+.blogunderquote{
+  font-size:1.25rem;
+  font-family: 'Roboto', sans-serif;
+  color: #222222;
+}
+.blogtitle{
+  font-family: 'Abril Fatface', cursive;
+}
+/*Footer*/
+
+footer{
+  width:100%;
+  position: relative;
+  bottom: 0;
+  background:#587C93;
+  color:#FFFFFF;
+  padding:20px 0 20px;
+  font-size:16px;
+  line-height:20px;
+
+}
+.frow{
+  width:85%;
+  margin:auto;
+  display:flex;
+  flex-wrap:wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.socialicon
+{
+display:flex;
+width:55px;
+}
+.fcol{
+  flex-basis: 25%;
+  padding:10px;
+}
+.fcol:nth-child(2){
+  flex-basis: 15%;
+}
+.fcol:nth-child(3){
+  flex-basis: 15%;
+}
+.blogo{
+  width:80%;
+  margin-bottom:30px; 
+}
+.fcol h2{
+  width:fit-content;
+  margin-bottom: 40px;
+  position:relative;
+}
+.fcol h3{
+  width:fit-content;
+  margin-bottom: 40px;
+  position:relative;
+}
+ul li
+{
+  list-style: none;
+  margin-bottom: 12px;
+}
+ul li a
+{
+text-decoration: none;
+color:#FFFFFF;
+}
+@media screen and (max-width:600px){
+  footer{
+    bottom:unset;
+  }
+  .fcol{
+    flex-basis: 100%;
+    padding:10px;
+  }
+  .fcol:nth-child(2){
+    flex-basis: 100%;
+  }
+  .fcol:nth-child(3){
+    flex-basis: 100%;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  footer {
+    bottom:unset;
+  }
+  .fcol{
+    flex-basis:100%;
+  }
+  .fcol:nth-child(2), .fcol:nth-child(3){
+    flex-basis: 100%;
+  }
+}

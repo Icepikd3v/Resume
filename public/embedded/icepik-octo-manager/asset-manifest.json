@@ -1,0 +1,19 @@
+{
+  "files": {
+    "main.css": "/embedded/icepik-octo-manager/static/css/main.f7a03343.css",
+    "main.js": "/embedded/icepik-octo-manager/static/js/main.ff9fc9a3.js",
+    "static/js/488.b25a07f7.chunk.js": "/embedded/icepik-octo-manager/static/js/488.b25a07f7.chunk.js",
+    "static/media/logo.png": "/embedded/icepik-octo-manager/static/media/logo.4fa9d8b19d7daa32c0b1.png",
+    "static/media/webb-dark.png": "/embedded/icepik-octo-manager/static/media/webb-dark.ee2b42938e17908a208f.png",
+    "static/media/printer-stream-placeholder.svg": "/embedded/icepik-octo-manager/static/media/printer-stream-placeholder.ff709c43c6e034a3703467617de16116.svg",
+    "index.html": "/embedded/icepik-octo-manager/index.html",
+    "static/media/avatar-placeholder.svg": "/embedded/icepik-octo-manager/static/media/avatar-placeholder.0a9e96bec1d2662914a40e93f026dcfb.svg",
+    "main.f7a03343.css.map": "/embedded/icepik-octo-manager/static/css/main.f7a03343.css.map",
+    "main.ff9fc9a3.js.map": "/embedded/icepik-octo-manager/static/js/main.ff9fc9a3.js.map",
+    "488.b25a07f7.chunk.js.map": "/embedded/icepik-octo-manager/static/js/488.b25a07f7.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f7a03343.css",
+    "static/js/main.ff9fc9a3.js"
+  ]
+}

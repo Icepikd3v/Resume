@@ -47,7 +47,7 @@ export default async function ProjectPage({ params }: Props) {
   const readme = detailedProject ? await loadProjectReadme(detailedProject.documentationPath) : null;
   const showcase = detailedProject?.showcase;
   const runtimeAppUrl = runtime?.appUrl;
-  const runtimeIsInternalLab = Boolean(runtimeAppUrl?.startsWith("/projects/") && runtimeAppUrl.endsWith("/live"));
+  const runtimeIsInternalLab = Boolean(runtimeAppUrl?.startsWith("/showcase-app/"));
   const runtimeIsRepoFallback = Boolean(runtimeAppUrl && project.repo && runtimeAppUrl === project.repo);
   const showAppLink = Boolean(runtimeAppUrl && !runtimeIsRepoFallback);
   const runtimeLabel = "Open App";
@@ -77,7 +77,7 @@ export default async function ProjectPage({ params }: Props) {
         ) : null}
         {runtimeIsInternalLab ? (
           <p className="muted">
-            Unified mode is enabled: this project opens in an integrated live lab route inside resume-site so everything ships in one deployment.
+            Unified mode is enabled: this project opens as an embedded in-app runtime inside resume-site so everything ships in one deployment.
           </p>
         ) : null}
       </section>

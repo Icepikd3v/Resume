@@ -42,7 +42,7 @@ Configure in `.env.local`:
 
 ```env
 SHOWCASE_PROXY_ENABLED=true
-SHOWCASE_USE_INTERNAL_LABS=true
+SHOWCASE_USE_INTERNAL_APPS=true
 
 SHOWCASE_OCTO_MANAGER_URL=http://localhost:3105
 SHOWCASE_OCTO_MANAGER_API_URL=http://localhost:5052
@@ -58,7 +58,7 @@ Current known public values:
 
 ```env
 SHOWCASE_PROXY_ENABLED=true
-SHOWCASE_USE_INTERNAL_LABS=true
+SHOWCASE_USE_INTERNAL_APPS=true
 
 SHOWCASE_RICK_MORTY_URL=https://rick-and-morty-react.netlify.app
 SHOWCASE_READY_SET_TRAVEL_URL=https://cdn.jsdelivr.net/gh/Icepikd3v/ReadySetTravel@main/dev/readysettravel/index.html

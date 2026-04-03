@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/embedded/rick-and-morty-react/favicon.ico" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="description" content="Web site created using create-react-app" />
+    <link rel="apple-touch-icon" href="/embedded/rick-and-morty-react/logo192.png" />
+    <link rel="manifest" href="/embedded/rick-and-morty-react/manifest.json" />
+    <title>React App</title>
+    <script>
+      (function bootstrapRickDemoSession() {
+        try {
+          if (!localStorage.getItem("rmToken")) {
+            localStorage.setItem("rmToken", "embedded-rick-demo-token");
+          }
+          if (!localStorage.getItem("rmUser")) {
+            localStorage.setItem(
+              "rmUser",
+              JSON.stringify({ email: "guest@resume-site.local", role: "guest-demo" })
+            );
+          }
+        } catch (_error) {}
+      })();
+    </script>
+    <script defer="defer" src="/embedded/rick-and-morty-react/static/js/main.da09bea2.js"></script>
+    <link href="/embedded/rick-and-morty-react/static/css/main.84cf82e2.css" rel="stylesheet" />
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
+</html>
