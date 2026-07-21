@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { PortraitShowcase } from "@/components/portrait-showcase";
 import { MissionControlWidget } from "@/components/mission-control-widget";
+import { blogPosts } from "@/lib/blog-data";
 import { getSiteContent } from "@/lib/content-store";
 import type { IconType } from "react-icons";
 import {
@@ -212,6 +213,30 @@ export default async function HomePage() {
                   Open Build Page
                 </Link>
                 <a href={project.repo}>Repository</a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section id="blog" className="panel">
+        <h2>Build Blog</h2>
+        <p className="section-lead">
+          Capstone journal entries that document the HomeFit AI process from planning through implementation.
+        </p>
+        <div className="grid columns-2">
+          {blogPosts.slice(0, 2).map((post) => (
+            <article key={post.slug} className="card blog-card">
+              <p className="project-tag">{post.tags.join(" • ")}</p>
+              <h3>{post.title}</h3>
+              <p className="muted">
+                By {post.author} • {post.date}
+              </p>
+              <p>{post.subtitle}</p>
+              <div className="project-links">
+                <Link href={`/blog/${post.slug}`} className="inline-link">
+                  Read Blog Entry
+                </Link>
               </div>
             </article>
           ))}

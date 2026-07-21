@@ -69,6 +69,11 @@ export default async function ProjectPage({ params }: Props) {
           <Link href="/" className="inline-link">
             Back to Resume Site
           </Link>
+          {slug === "homefit-ai" ? (
+            <Link href="/blog/homefit-ai-backend-foundation" className="inline-link">
+              Read Build Blog
+            </Link>
+          ) : null}
         </div>
         {runtimeIsRepoFallback ? (
           <p className="muted">

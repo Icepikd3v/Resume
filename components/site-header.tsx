@@ -7,6 +7,7 @@ export async function SiteHeader() {
         <Link href="/">Home</Link>
         <a href="/#about">About</a>
         <a href="/#projects">Projects</a>
+        <Link href="/blog">Blog</Link>
         <Link href="/video">Video</Link>
         <Link href="/s3d-print-processing">S3D Print&Processing</Link>
         <Link href="/dashboard">AdminDash</Link>
