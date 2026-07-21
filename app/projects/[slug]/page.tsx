@@ -72,7 +72,7 @@ export default async function ProjectPage({ params }: Props) {
         </div>
         {runtimeIsRepoFallback ? (
           <p className="muted">
-            No deployed app URL is configured yet for this project. Add a public <code>SHOWCASE_*</code> URL to enable one-click app launch here.
+            This project is currently documented as a local backend build. Use the run/test commands below to launch the API and dashboard.
           </p>
         ) : null}
         {runtimeIsInternalLab ? (
@@ -184,16 +184,14 @@ export default async function ProjectPage({ params }: Props) {
         </>
       ) : null}
 
-      <section className="panel">
-        <h2>README.md</h2>
-        {readme ? (
+      {readme ? (
+        <section className="panel">
+          <h2>README.md</h2>
           <pre className="code-block">
             <code>{readme}</code>
           </pre>
-        ) : (
-          <p className="muted">README content is not available for this project yet.</p>
-        )}
-      </section>
+        </section>
+      ) : null}
     </div>
   );
 }
