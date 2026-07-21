@@ -152,6 +152,32 @@ export default async function ProjectPage({ params }: Props) {
             </div>
           </section>
 
+          {detailedProject.buildNotes?.length ? (
+            <section className="panel">
+              <p className="eyebrow">Backend Build Notes</p>
+              <h2>How the Prototype Works</h2>
+              <p className="section-lead">
+                These notes translate the backend README into a portfolio-friendly walkthrough of the
+                implementation, research value, and AI integration plan.
+              </p>
+              <div className="build-note-grid">
+                {detailedProject.buildNotes.map((note) => (
+                  <article className="build-note-card" key={note.title}>
+                    <h3>{note.title}</h3>
+                    <p>{note.body}</p>
+                    {note.items?.length ? (
+                      <ul className="detail-list">
+                        {note.items.map((item) => (
+                          <li key={item}>{item}</li>
+                        ))}
+                      </ul>
+                    ) : null}
+                  </article>
+                ))}
+              </div>
+            </section>
+          ) : null}
+
           <section className="panel">
             <h2>Retrospective</h2>
             <div className="grid columns-3">
@@ -184,7 +210,7 @@ export default async function ProjectPage({ params }: Props) {
         </>
       ) : null}
 
-      {readme ? (
+      {readme && !detailedProject?.buildNotes?.length ? (
         <section className="panel">
           <h2>README.md</h2>
           <pre className="code-block">

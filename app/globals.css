@@ -490,7 +490,7 @@ h1 {
 
 .journal-visual-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1rem;
 }
 
@@ -514,6 +514,23 @@ h1 {
   padding: 0.75rem 0.85rem 0.85rem;
   color: var(--text-muted);
   font-size: 0.94rem;
+}
+
+.build-note-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.build-note-card {
+  border: 1px solid rgba(121, 185, 255, 0.24);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  background: linear-gradient(145deg, rgba(9, 17, 39, 0.82), rgba(9, 25, 35, 0.68));
+}
+
+.build-note-card h3 {
+  margin-top: 0;
 }
 
 .video-grid {

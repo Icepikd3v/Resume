@@ -41,6 +41,11 @@ export type Project = {
       improvements: string[];
     };
   };
+  buildNotes?: Array<{
+    title: string;
+    body: string;
+    items?: string[];
+  }>;
   theme?: {
     accent: string;
     accentSoft: string;
@@ -145,6 +150,11 @@ export const projects: Project[] = [
           caption: "Visible backend dashboard showing the API is running and exposing core application status."
         },
         {
+          src: "/homefit-ai/backend-demo-after-run.png",
+          alt: "HomeFit AI backend dashboard after running API actions",
+          caption: "End-to-end demo evidence after running health, sessions, research logging, and recommendations."
+        },
+        {
           src: "/homefit-ai/swagger-api.png",
           alt: "Swagger documentation for HomeFit AI backend API",
           caption: "Swagger/OpenAPI documentation used to review and test the backend contract."
@@ -162,9 +172,9 @@ export const projects: Project[] = [
           "The project now has concrete evidence for the proposal deck, README, and committee questions."
         ],
         wentWrong: [
-          "Early work had account and repository confusion between school and work GitHub identities.",
           "Some backend dashboard visibility depended on local Docker and server state, so screenshots and README guidance became important.",
-          "AI scope needed clearer explanation so reviewers understand what is implemented now versus what is planned for the final application."
+          "AI scope needed clearer explanation so reviewers understand what is implemented now versus what is planned for the final application.",
+          "The team had to balance proposal documentation, IRB planning, and implementation work in the same week."
         ],
         improvements: [
           "Keep frontend and backend integration notes in one shared checklist so handoff points are easier to track.",
@@ -173,6 +183,55 @@ export const projects: Project[] = [
         ]
       }
     },
+    buildNotes: [
+      {
+        title: "Backend Stack",
+        body:
+          "HomeFit AI's backend is built as a Python API service designed for team integration and capstone review. The stack keeps the prototype realistic enough for Android integration while still being fast to run locally.",
+        items: [
+          "FastAPI for REST endpoints and automatic Swagger/OpenAPI documentation",
+          "PostgreSQL for local/team integration data",
+          "SQLite for fast automated test runs",
+          "SQLAlchemy 2 for models and persistence",
+          "Pydantic Settings for environment configuration",
+          "Pytest, HTTPX, and Ruff for testing and code quality",
+          "Docker Compose for repeatable local startup"
+        ]
+      },
+      {
+        title: "Core Application Flow",
+        body:
+          "The backend supports the first vertical slice of the application: show supported exercises, start a workout session, store workout sets, complete the session, and retrieve workout history. This gives Elena's frontend a clear contract to connect against.",
+        items: [
+          "Health check confirms the API and database are available",
+          "Exercise catalog returns supported movements such as squats and push-ups",
+          "Workout session endpoints create, update, complete, and retrieve user-owned workout activity",
+          "Idempotency keys protect mobile writes so repeated requests do not duplicate set records"
+        ]
+      },
+      {
+        title: "AI Implementation Plan",
+        body:
+          "The current backend is ready to receive AI-assisted workout outputs without requiring raw video or audio storage. Camera AI can provide movement or repetition estimates, while voice AI can provide hands-free workout commands.",
+        items: [
+          "Camera AI payloads can include exercise_id, repetitions, duration_seconds, confidence, correction_status, and algorithm_version",
+          "Voice AI payloads can support actions such as start workout, log set, complete session, or load history",
+          "AI outputs are stored as structured measurements that can be compared against user corrections or observed results",
+          "The first recommendation layer remains explainable and rule-based while future AI personalization is evaluated"
+        ]
+      },
+      {
+        title: "Research and Privacy Boundary",
+        body:
+          "The backend is designed to support IRB-friendly usability research by collecting the minimum useful data for evaluating prototype usability, workload, AI accuracy, and feature usefulness.",
+        items: [
+          "Participant records can use anonymous participant codes instead of names",
+          "Study events can store task time, interaction errors, usability feedback, and optional workload ratings",
+          "Raw camera frames, raw voice recordings, emails, and direct identifiers are out of scope unless explicitly approved",
+          "Results can be summarized for the capstone report without identifying individual participants"
+        ]
+      }
+    ],
     theme: {
       accent: "#22c55e",
       accentSoft: "#38bdf8",
