@@ -28,6 +28,19 @@ export type Project = {
     scope: string;
   };
   integrationPlaceholders?: string[];
+  journal?: {
+    title: string;
+    author: string;
+    date: string;
+    intro: string;
+    featureNarrative: string[];
+    visuals: Array<{ src: string; alt: string; caption: string }>;
+    retrospective: {
+      wentRight: string[];
+      wentWrong: string[];
+      improvements: string[];
+    };
+  };
   theme?: {
     accent: string;
     accentSoft: string;
@@ -54,6 +67,118 @@ export type MediaItem = {
 };
 
 export const projects: Project[] = [
+  {
+    id: "homefit-ai",
+    slug: "homefit-ai",
+    title: "HomeFit AI Capstone Backend",
+    summary:
+      "Master's capstone project building the backend foundation for an AI-assisted home fitness app with workout sessions, exercise data, research logging, and recommendation support.",
+    stack: ["Python", "FastAPI", "PostgreSQL", "Docker", "REST API", "AI-assisted workflow"],
+    domain: ["capstone", "backend", "ai", "research"],
+    sourceUrl: "https://github.com/FullSailGameStudies/capstone-project-homefit-ai",
+    documentationPath: "/Users/icepik/Desktop/Software Project-Research-Planning-Design/HomeFitAI/BackEnd/README.md",
+    highlights: [
+      "Built a FastAPI backend with health checks, Swagger documentation, and application-state endpoints.",
+      "Modeled exercises, workout sessions, workout sets, recommendations, and research events in PostgreSQL.",
+      "Added idempotent write behavior so mobile retries do not duplicate workout set records.",
+      "Designed the backend contract for future camera AI rep counting and voice-command workout controls.",
+      "Created visible backend dashboard evidence for committee review and teammate onboarding."
+    ],
+    improvementIdeas: [
+      "Connect Elena's Android frontend directly to the live API contract.",
+      "Add authentication and participant-safe user boundaries before broader testing.",
+      "Capture structured AI outputs with algorithm version, confidence, and correction status.",
+      "Expand automated tests around research exports and recommendation behavior."
+    ],
+    showcase: {
+      hero: "Backend foundation for AI-assisted home workouts",
+      subhero:
+        "A capstone backend build focused on reliable workout data, explainable recommendations, and research-ready AI measurement.",
+      audience: "Built for capstone reviewers, teammates, and future employers evaluating backend planning and implementation.",
+      featureBlocks: [
+        {
+          title: "Workout Session API",
+          detail: "Supports starting sessions, logging set results, completing workouts, and retrieving workout history."
+        },
+        {
+          title: "AI Data Contract",
+          detail: "Prepares the system to store camera and voice AI outputs as compact, auditable records instead of raw media."
+        },
+        {
+          title: "Research Logging",
+          detail: "Creates a path for usability study data, participant-safe IDs, and structured analysis of feature performance."
+        }
+      ]
+    },
+    runtime: {
+      appUrl: "http://127.0.0.1:8000",
+      backendUrl: "http://127.0.0.1:8000/docs",
+      startCommands: [
+        "cd /Users/icepik/Desktop/Software Project-Research-Planning-Design/HomeFitAI/BackEnd && docker compose up --build",
+        "open http://127.0.0.1:8000",
+        "open http://127.0.0.1:8000/docs"
+      ],
+      notes:
+        "The backend runs locally with Docker Compose and exposes a visible dashboard plus Swagger documentation for API testing."
+    },
+    integrationPlaceholders: [
+      "Camera AI will provide structured exercise outputs such as exercise_id, repetitions, duration_seconds, confidence, and algorithm_version.",
+      "Voice AI will support hands-free commands such as starting a workout, logging a set, or ending a session.",
+      "The backend will store AI outputs and participant corrections for accuracy and usability analysis without requiring raw video/audio storage by default."
+    ],
+    journal: {
+      title: "Building the HomeFit AI Backend Foundation",
+      author: "Samuel Farmer",
+      date: "July 21, 2026",
+      intro:
+        "This month, our team moved HomeFit AI from proposal planning into a working backend foundation. Elena focused on the frontend experience while I concentrated on the API, database, and research-ready backend structure needed to support the app.",
+      featureNarrative: [
+        "The main backend feature I developed was a FastAPI service for the HomeFit AI application. I set up health checks, Swagger documentation, exercise endpoints, workout-session endpoints, and a visible dashboard so the team and committee can quickly understand what is running.",
+        "I built the backend around the needs of the future Android app. The API can seed and list supported exercises, start a workout session, add set results, complete a session, and retrieve workout history. I also added duplicate retry protection so a mobile app retry does not accidentally create the same workout set twice.",
+        "Because HomeFit AI includes AI-assisted fitness features, I planned the backend contract around structured AI outputs. Camera AI can eventually send rep counts or movement estimates, while voice AI can support hands-free workout controls. The backend stores compact fields such as exercise id, repetitions, duration, source, correction status, confidence, and algorithm version, which helps the project evaluate AI usefulness without storing raw media by default.",
+        "The tools used this month included Python, FastAPI, PostgreSQL, Docker, Swagger/OpenAPI, GitHub, and automated backend tests. The most important research connection was making sure the backend can support usability testing, participant-safe data collection, and future analysis of whether AI-assisted workout logging is accurate and useful."
+      ],
+      visuals: [
+        {
+          src: "/homefit-ai/backend-dashboard.png",
+          alt: "HomeFit AI backend dashboard running locally",
+          caption: "Visible backend dashboard showing the API is running and exposing core application status."
+        },
+        {
+          src: "/homefit-ai/swagger-api.png",
+          alt: "Swagger documentation for HomeFit AI backend API",
+          caption: "Swagger/OpenAPI documentation used to review and test the backend contract."
+        },
+        {
+          src: "/homefit-ai/database-models.png",
+          alt: "HomeFit AI backend database model evidence",
+          caption: "Database and model planning for exercises, workout sessions, recommendations, and research events."
+        }
+      ],
+      retrospective: {
+        wentRight: [
+          "We clarified team ownership: Elena presents frontend work and I present backend work.",
+          "The backend moved beyond a static demo into a runnable API with database-backed application behavior.",
+          "The project now has concrete evidence for the proposal deck, README, and committee questions."
+        ],
+        wentWrong: [
+          "Early work had account and repository confusion between school and work GitHub identities.",
+          "Some backend dashboard visibility depended on local Docker and server state, so screenshots and README guidance became important.",
+          "AI scope needed clearer explanation so reviewers understand what is implemented now versus what is planned for the final application."
+        ],
+        improvements: [
+          "Keep frontend and backend integration notes in one shared checklist so handoff points are easier to track.",
+          "Add authentication and participant-safe identifiers before live study testing.",
+          "Continue writing down assumptions, advisor feedback, and technical decisions each week so the final capstone story is easier to present."
+        ]
+      }
+    },
+    theme: {
+      accent: "#22c55e",
+      accentSoft: "#38bdf8",
+      surface: "rgba(8, 20, 25, 0.92)"
+    }
+  },
   {
     id: "rick-and-morty-react",
     slug: "rick-and-morty-react",
@@ -521,6 +646,7 @@ export function findProjectBySlug(slug: string) {
 }
 
 export const portfolioRepoProjectIds = [
+  "homefit-ai",
   "icepik-octo-manager",
   "ufc-mobile",
   "rick-and-morty-react",

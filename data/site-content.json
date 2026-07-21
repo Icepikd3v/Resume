@@ -13,6 +13,20 @@
   },
   "featuredProjects": [
     {
+      "slug": "homefit-ai",
+      "name": "HomeFit AI Capstone Backend",
+      "summary": "Master's capstone backend for an AI-assisted home fitness app, including workout sessions, exercise data, research logging, and recommendation support.",
+      "stack": [
+        "Python",
+        "FastAPI",
+        "PostgreSQL",
+        "Docker",
+        "REST API"
+      ],
+      "repo": "https://github.com/FullSailGameStudies/capstone-project-homefit-ai",
+      "category": "capstone"
+    },
+    {
       "slug": "icepik-octo-manager",
       "name": "icepik-octo-manager",
       "summary": "Multi-user 3D printing control center with OctoPrint integration, print queueing, webcam monitoring, and print history.",

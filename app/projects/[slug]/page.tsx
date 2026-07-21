@@ -125,6 +125,65 @@ export default async function ProjectPage({ params }: Props) {
         ) : null}
       </section>
 
+      {detailedProject?.journal ? (
+        <>
+          <section className="panel capstone-journal">
+            <p className="eyebrow">Capstone Journal</p>
+            <h2>{detailedProject.journal.title}</h2>
+            <p className="muted">
+              By {detailedProject.journal.author} • {detailedProject.journal.date}
+            </p>
+            <p className="section-lead">{detailedProject.journal.intro}</p>
+            <h3>Feature Development</h3>
+            {detailedProject.journal.featureNarrative.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </section>
+
+          <section className="panel">
+            <h2>Development Visuals</h2>
+            <div className="journal-visual-grid">
+              {detailedProject.journal.visuals.map((visual) => (
+                <figure className="journal-visual-card" key={visual.src}>
+                  <img src={visual.src} alt={visual.alt} />
+                  <figcaption>{visual.caption}</figcaption>
+                </figure>
+              ))}
+            </div>
+          </section>
+
+          <section className="panel">
+            <h2>Retrospective</h2>
+            <div className="grid columns-3">
+              <article className="card">
+                <h3>What Went Right</h3>
+                <ul className="detail-list">
+                  {detailedProject.journal.retrospective.wentRight.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </article>
+              <article className="card">
+                <h3>What Went Wrong</h3>
+                <ul className="detail-list">
+                  {detailedProject.journal.retrospective.wentWrong.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </article>
+              <article className="card">
+                <h3>Moving Forward</h3>
+                <ul className="detail-list">
+                  {detailedProject.journal.retrospective.improvements.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </article>
+            </div>
+          </section>
+        </>
+      ) : null}
+
       <section className="panel">
         <h2>README.md</h2>
         {readme ? (

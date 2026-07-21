@@ -484,6 +484,38 @@ h1 {
   object-fit: cover;
 }
 
+.capstone-journal p {
+  max-width: 78ch;
+}
+
+.journal-visual-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.journal-visual-card {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid rgba(123, 130, 255, 0.28);
+  border-radius: 0.75rem;
+  background: linear-gradient(155deg, rgba(13, 20, 50, 0.88), rgba(8, 13, 36, 0.78));
+}
+
+.journal-visual-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-bottom: 1px solid rgba(123, 130, 255, 0.24);
+}
+
+.journal-visual-card figcaption {
+  padding: 0.75rem 0.85rem 0.85rem;
+  color: var(--text-muted);
+  font-size: 0.94rem;
+}
+
 .video-grid {
   display: grid;
   gap: 1rem;
