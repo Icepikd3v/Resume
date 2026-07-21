@@ -234,8 +234,8 @@ export default async function HomePage() {
               </p>
               <p>{post.subtitle}</p>
               <div className="project-links">
-                <Link href={`/blog/${post.slug}`} className="inline-link">
-                  Read Blog Entry
+                <Link href="/blog" className="inline-link">
+                  View Blog
                 </Link>
               </div>
             </article>

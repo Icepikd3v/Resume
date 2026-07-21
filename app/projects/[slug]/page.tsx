@@ -70,7 +70,7 @@ export default async function ProjectPage({ params }: Props) {
             Back to Resume Site
           </Link>
           {slug === "homefit-ai" ? (
-            <Link href="/blog/homefit-ai-backend-foundation" className="inline-link">
+            <Link href="/blog" className="inline-link">
               Read Build Blog
             </Link>
           ) : null}
