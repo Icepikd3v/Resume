@@ -182,9 +182,8 @@ export default async function HomePage() {
           Front-End Developer at Elysium INC
         </p>
         <p>
-          At Elysium INC, I work on the React and Three.js front end for the AI Smart Mall
-          experience, including the investor-facing prototype, corporate website interface,
-          Smart Mall UI, and Elly Brain engine presentation layer.
+          I am a full-time Front-End Developer at Elysium INC, contributing to system development,
+          design planning, and implementation for the company&apos;s digital platform.
         </p>
 
         <h3>Tech Stack</h3>
