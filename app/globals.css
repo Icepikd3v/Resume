@@ -517,6 +517,7 @@ h1 {
 
 .live-site-preview-link {
   display: block;
+  position: relative;
   border-radius: 0.62rem;
   overflow: hidden;
   border: 1px solid rgba(123, 130, 255, 0.3);
@@ -529,6 +530,51 @@ h1 {
   width: 100%;
   aspect-ratio: 16 / 10;
   object-fit: cover;
+}
+
+.construction-overlay {
+  align-items: center;
+  background:
+    linear-gradient(135deg, rgba(7, 9, 19, 0.5), rgba(7, 9, 19, 0.18)),
+    repeating-linear-gradient(
+      -35deg,
+      rgba(245, 180, 59, 0.18) 0,
+      rgba(245, 180, 59, 0.18) 10px,
+      rgba(10, 12, 18, 0.2) 10px,
+      rgba(10, 12, 18, 0.2) 20px
+    );
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  padding: 1rem;
+  position: absolute;
+}
+
+.construction-banner {
+  background: linear-gradient(135deg, rgba(249, 197, 91, 0.96), rgba(230, 151, 40, 0.94));
+  border: 1px solid rgba(255, 234, 177, 0.9);
+  border-radius: 0.5rem;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.34);
+  color: #10131b;
+  display: grid;
+  gap: 0.18rem;
+  max-width: min(88%, 26rem);
+  padding: 0.85rem 1rem;
+  text-align: center;
+  text-transform: uppercase;
+  transform: rotate(-4deg);
+}
+
+.construction-banner strong {
+  font-size: clamp(1rem, 3vw, 1.85rem);
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.construction-banner span {
+  font-size: clamp(0.68rem, 1.6vw, 0.88rem);
+  font-weight: 800;
+  letter-spacing: 0.08em;
 }
 
 .capstone-journal p {

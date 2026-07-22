@@ -106,6 +106,12 @@ export default async function HomePage() {
 
     return "/Elysiummall.com.png";
   };
+  const isArchivedLiveSite = (site: { name: string; url: string }) => {
+    const name = site.name.toLowerCase().replace(/\s+/g, "");
+    const url = site.url.toLowerCase();
+
+    return name.includes("mybrothersfinds") || url.includes("mybrothersfinds.com");
+  };
 
   return (
     <div className="page-shell">
@@ -255,6 +261,14 @@ export default async function HomePage() {
                   className="live-site-preview"
                   loading="lazy"
                 />
+                {isArchivedLiveSite(site) ? (
+                  <span className="construction-overlay" aria-label="Under construction">
+                    <span className="construction-banner">
+                      <strong>Under Construction</strong>
+                      <span>Archived for redevelopment</span>
+                    </span>
+                  </span>
+                ) : null}
               </a>
               <h3>{site.name}</h3>
               <p className="muted">{site.description}</p>
