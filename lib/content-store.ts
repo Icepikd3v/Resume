@@ -54,7 +54,7 @@ const fallbackContent: SiteContent = {
   alias: "Icepikd3v",
   headline: "Full Stack Web Developer | Frontend Specialist | 3D Print & Hardware Enthusiast",
   about:
-    "I love building useful, user-friendly tools-especially ones that connect software to real-world hardware. I bring a creative, hands-on mindset to every project, whether I'm wiring up a Raspberry Pi, refining a front-end UI, or managing complex print queues.",
+    "My primary full-time development work is with Elysium INC, where I build React and Three.js interfaces for the AI Smart Mall experience. I also continue academic and side-project development across backend systems, hardware-connected tools, portfolio builds, and 3D printing workflows.",
   contacts: ["sam.d3v.35@gmail.com", "icepik09@gmail.com"],
   socialLinks: {
     github: "https://github.com/Icepikd3v",
