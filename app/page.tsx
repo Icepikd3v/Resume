@@ -117,7 +117,7 @@ export default async function HomePage() {
             <p className="name-alias">{content.alias}</p>
             <p className="intro">{content.headline}</p>
             <div className="hero-quick-chips" aria-label="Professional highlights">
-              <span className="chip">Open to Work</span>
+              <span className="chip">Open to Part-Time Work</span>
               <span className="chip">Remote + On-Site</span>
               <span className="chip">MERN + Automation</span>
             </div>
