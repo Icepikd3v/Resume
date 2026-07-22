@@ -82,7 +82,8 @@ const fallbackContent: SiteContent = {
     {
       name: "MyBrothersFinds",
       url: "https://www.mybrothersfinds.com",
-      description: "Side project for storage, vintage, and used goods resale."
+      description:
+        "Archived side project for storage, vintage, and used goods resale; currently in redevelopment for a future redeployment."
     },
     {
       name: "Elysium Mall",
