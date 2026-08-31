@@ -1,7 +1,13 @@
 import Link from "next/link";
-import { blogPosts } from "@/lib/blog-data";
+import { getBlogPosts } from "@/lib/blog-store";
 
-export default function BlogIndexPage() {
+// Posts are edited from the dashboard at runtime, so this page cannot be
+// baked at build time or new entries would not appear until the next deploy.
+export const dynamic = "force-dynamic";
+
+export default async function BlogIndexPage() {
+  const blogPosts = await getBlogPosts();
+
   return (
     <div className="page-shell">
       <section className="panel hero">
@@ -15,6 +21,7 @@ export default function BlogIndexPage() {
 
       <section className="panel">
         <div className="blog-entry-list">
+          {blogPosts.length === 0 ? <p className="muted">No entries published yet.</p> : null}
           {blogPosts.map((post) => (
             <article className="card blog-card" key={post.slug}>
               <p className="project-tag">{post.tags.join(" • ")}</p>

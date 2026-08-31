@@ -27,6 +27,45 @@ type VideoItem = {
   embedUrl: string;
 };
 
+type BlogPost = {
+  slug: string;
+  title: string;
+  subtitle: string;
+  author: string;
+  date: string;
+  projectSlug?: string;
+  tags: string[];
+  intro: string;
+  sections: Array<{ title: string; body: string[] }>;
+  visuals: Array<{ src: string; alt: string; caption: string }>;
+  retrospective: {
+    wentRight: string[];
+    wentWrong: string[];
+    improvements: string[];
+  };
+};
+
+/**
+ * The post form edits plain text rather than nested arrays. Sections, visuals
+ * and retrospective bullets are typed in the same shapes the existing entries
+ * already use, then parsed on save.
+ */
+type BlogDraft = {
+  slug: string;
+  title: string;
+  subtitle: string;
+  author: string;
+  date: string;
+  projectSlug: string;
+  tagsText: string;
+  intro: string;
+  sectionsText: string;
+  visualsText: string;
+  wentRightText: string;
+  wentWrongText: string;
+  improvementsText: string;
+};
+
 type SiteContent = {
   name: string;
   alias: string;
@@ -101,6 +140,135 @@ const defaultContent: SiteContent = {
   printTimelapseVideos: [],
   facebookReels: []
 };
+
+const EMPTY_BLOG_DRAFT: BlogDraft = {
+  slug: "",
+  title: "",
+  subtitle: "",
+  author: "Samuel Farmer",
+  date: "",
+  projectSlug: "",
+  tagsText: "",
+  intro: "",
+  sectionsText: "",
+  visualsText: "",
+  wentRightText: "",
+  wentWrongText: "",
+  improvementsText: ""
+};
+
+function splitLines(text: string): string[] {
+  return text
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+}
+
+function splitCommas(text: string): string[] {
+  return text
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+/**
+ * "## Heading" opens a section; blank lines separate its paragraphs. Text
+ * before the first heading is ignored, since the intro has its own field.
+ */
+function parseSections(text: string): BlogPost["sections"] {
+  const sections: BlogPost["sections"] = [];
+  let current: BlogPost["sections"][number] | null = null;
+  let paragraph: string[] = [];
+
+  const flushParagraph = () => {
+    if (current && paragraph.length) {
+      current.body.push(paragraph.join(" ").trim());
+    }
+    paragraph = [];
+  };
+
+  for (const rawLine of text.split("\n")) {
+    const line = rawLine.trim();
+    const heading = line.match(/^#{1,6}\s+(.*)$/);
+
+    if (heading) {
+      flushParagraph();
+      if (current && current.body.length) sections.push(current);
+      current = { title: heading[1].trim(), body: [] };
+      continue;
+    }
+
+    if (!line) {
+      flushParagraph();
+      continue;
+    }
+
+    paragraph.push(line);
+  }
+
+  flushParagraph();
+  if (current && current.body.length) sections.push(current);
+
+  return sections;
+}
+
+function serializeSections(sections: BlogPost["sections"]): string {
+  return sections
+    .map((section) => `## ${section.title}\n\n${section.body.join("\n\n")}`)
+    .join("\n\n");
+}
+
+/** One visual per line: src | alt text | caption */
+function parseVisuals(text: string): BlogPost["visuals"] {
+  return splitLines(text)
+    .map((line) => {
+      const [src = "", alt = "", caption = ""] = line.split("|").map((part) => part.trim());
+      return { src, alt, caption };
+    })
+    .filter((visual) => visual.src);
+}
+
+function serializeVisuals(visuals: BlogPost["visuals"]): string {
+  return visuals.map((visual) => `${visual.src} | ${visual.alt} | ${visual.caption}`).join("\n");
+}
+
+function draftFromPost(post: BlogPost): BlogDraft {
+  return {
+    slug: post.slug,
+    title: post.title,
+    subtitle: post.subtitle,
+    author: post.author,
+    date: post.date,
+    projectSlug: post.projectSlug || "",
+    tagsText: post.tags.join(", "),
+    intro: post.intro,
+    sectionsText: serializeSections(post.sections),
+    visualsText: serializeVisuals(post.visuals),
+    wentRightText: post.retrospective.wentRight.join("\n"),
+    wentWrongText: post.retrospective.wentWrong.join("\n"),
+    improvementsText: post.retrospective.improvements.join("\n")
+  };
+}
+
+function postFromDraft(draft: BlogDraft): BlogPost {
+  return {
+    slug: draft.slug.trim(),
+    title: draft.title.trim(),
+    subtitle: draft.subtitle.trim(),
+    author: draft.author.trim(),
+    date: draft.date.trim(),
+    projectSlug: draft.projectSlug.trim(),
+    tags: splitCommas(draft.tagsText),
+    intro: draft.intro.trim(),
+    sections: parseSections(draft.sectionsText),
+    visuals: parseVisuals(draft.visualsText),
+    retrospective: {
+      wentRight: splitLines(draft.wentRightText),
+      wentWrong: splitLines(draft.wentWrongText),
+      improvements: splitLines(draft.improvementsText)
+    }
+  };
+}
 
 function normalizeContent(raw: Partial<SiteContent>): SiteContent {
   return {
@@ -237,6 +405,13 @@ export default function DashboardPage() {
   });
   const [sectionPages, setSectionPages] = useState<Record<ListKey, number>>(INITIAL_SECTION_PAGES);
 
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [blogStorageWarning, setBlogStorageWarning] = useState("");
+  const [showBlogForm, setShowBlogForm] = useState(false);
+  const [editingBlogSlug, setEditingBlogSlug] = useState<string | null>(null);
+  const [blogDraft, setBlogDraft] = useState<BlogDraft>(EMPTY_BLOG_DRAFT);
+  const [blogStatus, setBlogStatus] = useState("");
+
   const listSizes = useMemo(
     () => ({
       portraits: content.portraits.length,
@@ -319,10 +494,106 @@ export default function DashboardPage() {
       .catch(() => setStatus("Failed to load content"));
   };
 
+  const loadBlogPosts = () => {
+    fetch("/api/blog")
+      .then((res) => res.json())
+      .then((data) => {
+        setBlogPosts(Array.isArray(data?.posts) ? data.posts : []);
+        setBlogStorageWarning(
+          data?.storage?.persistent
+            ? ""
+            : "Blog storage is unavailable, so saving is disabled. Set MONGO_URI to enable editing."
+        );
+      })
+      .catch(() => setBlogStatus("Failed to load posts."));
+  };
+
   useEffect(() => {
     if (!isAuthenticated) return;
     loadContent();
+    loadBlogPosts();
   }, [isAuthenticated]);
+
+  const startNewBlogPost = () => {
+    setEditingBlogSlug(null);
+    setBlogDraft({
+      ...EMPTY_BLOG_DRAFT,
+      author: content.name || EMPTY_BLOG_DRAFT.author,
+      date: new Date().toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      })
+    });
+    setBlogStatus("");
+    setShowBlogForm(true);
+  };
+
+  const startEditBlogPost = (post: BlogPost) => {
+    setEditingBlogSlug(post.slug);
+    setBlogDraft(draftFromPost(post));
+    setBlogStatus("");
+    setShowBlogForm(true);
+  };
+
+  const cancelBlogForm = () => {
+    setShowBlogForm(false);
+    setEditingBlogSlug(null);
+    setBlogDraft(EMPTY_BLOG_DRAFT);
+    setBlogStatus("");
+  };
+
+  const saveBlogDraft = async () => {
+    if (!blogDraft.title.trim()) {
+      setBlogStatus("A post needs a title.");
+      return;
+    }
+
+    setBlogStatus("Saving post...");
+
+    const res = await fetch("/api/blog", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-admin-user": username,
+        "x-admin-pass": password
+      },
+      body: JSON.stringify(postFromDraft(blogDraft))
+    });
+
+    if (!res.ok) {
+      const detail = await res.json().catch(() => null);
+      setBlogStatus(detail?.error || "Could not save post.");
+      return;
+    }
+
+    setBlogStatus(editingBlogSlug ? "Post updated." : "Post published.");
+    setShowBlogForm(false);
+    setEditingBlogSlug(null);
+    setBlogDraft(EMPTY_BLOG_DRAFT);
+    loadBlogPosts();
+  };
+
+  const removeBlogPost = async (slug: string) => {
+    setBlogStatus("Removing post...");
+
+    const res = await fetch(`/api/blog?slug=${encodeURIComponent(slug)}`, {
+      method: "DELETE",
+      headers: {
+        "x-admin-user": username,
+        "x-admin-pass": password
+      }
+    });
+
+    if (!res.ok) {
+      const detail = await res.json().catch(() => null);
+      setBlogStatus(detail?.error || "Could not remove post.");
+      return;
+    }
+
+    setBlogStatus("Post removed.");
+    loadBlogPosts();
+  };
 
   useEffect(() => {
     setSectionPages((prev) => ({
@@ -1239,6 +1510,191 @@ export default function DashboardPage() {
                 </div>
               </article>
             ) : null}
+          </section>
+
+          <section className="panel">
+            <h2>Blog Posts</h2>
+            <p className="muted">
+              Entries on the Capstone Blog page. Posts save immediately on their own — the
+              Save Changes button below is only for the sections above.
+            </p>
+            {blogStorageWarning ? <p className="muted">{blogStorageWarning}</p> : null}
+
+            <div className="dashboard-list">
+              {blogPosts.length === 0 ? (
+                <p className="muted">No posts yet.</p>
+              ) : (
+                blogPosts.map((post) => (
+                  <article key={post.slug} className="dashboard-item dashboard-list-row compact-row">
+                    <div className="project-list-meta">
+                      <p className="project-list-title">{post.title}</p>
+                      <p className="muted">
+                        {post.date || "No date"} • {post.sections.length} sections •{" "}
+                        {post.visuals.length} visuals
+                      </p>
+                    </div>
+                    <div className="project-list-actions">
+                      <button
+                        type="button"
+                        className="btn btn-ghost btn-small"
+                        onClick={() => startEditBlogPost(post)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-ghost btn-small"
+                        onClick={() => removeBlogPost(post.slug)}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </article>
+                ))
+              )}
+            </div>
+
+            <button type="button" className="btn btn-ghost" onClick={startNewBlogPost}>
+              New Blog Post
+            </button>
+
+            {showBlogForm ? (
+              <article className="dashboard-item">
+                <h3>{editingBlogSlug ? "Edit Post" : "New Post"}</h3>
+                <div className="dashboard-form">
+                  <label>
+                    Title
+                    <input
+                      value={blogDraft.title}
+                      onChange={(e) => setBlogDraft((prev) => ({ ...prev, title: e.target.value }))}
+                      required
+                    />
+                  </label>
+                  <label>
+                    Subtitle
+                    <input
+                      value={blogDraft.subtitle}
+                      onChange={(e) => setBlogDraft((prev) => ({ ...prev, subtitle: e.target.value }))}
+                    />
+                  </label>
+                  <label>
+                    Author
+                    <input
+                      value={blogDraft.author}
+                      onChange={(e) => setBlogDraft((prev) => ({ ...prev, author: e.target.value }))}
+                    />
+                  </label>
+                  <label>
+                    Date
+                    <input
+                      value={blogDraft.date}
+                      onChange={(e) => setBlogDraft((prev) => ({ ...prev, date: e.target.value }))}
+                      placeholder="August 30, 2026"
+                    />
+                  </label>
+                  <label>
+                    Slug
+                    <input
+                      value={blogDraft.slug}
+                      onChange={(e) => setBlogDraft((prev) => ({ ...prev, slug: e.target.value }))}
+                      placeholder="Leave blank to generate from the title"
+                    />
+                  </label>
+                  <label>
+                    Linked Project Slug
+                    <input
+                      value={blogDraft.projectSlug}
+                      onChange={(e) =>
+                        setBlogDraft((prev) => ({ ...prev, projectSlug: e.target.value }))
+                      }
+                      placeholder="homefit-ai"
+                    />
+                  </label>
+                  <label>
+                    Tags
+                    <input
+                      value={blogDraft.tagsText}
+                      onChange={(e) => setBlogDraft((prev) => ({ ...prev, tagsText: e.target.value }))}
+                      placeholder="HomeFit AI, Capstone, Android"
+                    />
+                  </label>
+                  <label>
+                    Intro
+                    <textarea
+                      rows={4}
+                      value={blogDraft.intro}
+                      onChange={(e) => setBlogDraft((prev) => ({ ...prev, intro: e.target.value }))}
+                      placeholder="One or two sentences that open the post."
+                    />
+                  </label>
+                  <label>
+                    Sections
+                    <textarea
+                      rows={14}
+                      value={blogDraft.sectionsText}
+                      onChange={(e) =>
+                        setBlogDraft((prev) => ({ ...prev, sectionsText: e.target.value }))
+                      }
+                      placeholder={"## Feature Development\n\nFirst paragraph.\n\nSecond paragraph.\n\n## What I Learned\n\nAnother paragraph."}
+                    />
+                  </label>
+                  <label>
+                    Visuals
+                    <textarea
+                      rows={4}
+                      value={blogDraft.visualsText}
+                      onChange={(e) =>
+                        setBlogDraft((prev) => ({ ...prev, visualsText: e.target.value }))
+                      }
+                      placeholder={"/homefit-ai/screenshot.png | Alt text | Caption shown under the image"}
+                    />
+                  </label>
+                  <label>
+                    Retrospective — What Went Right
+                    <textarea
+                      rows={4}
+                      value={blogDraft.wentRightText}
+                      onChange={(e) =>
+                        setBlogDraft((prev) => ({ ...prev, wentRightText: e.target.value }))
+                      }
+                      placeholder="One bullet per line."
+                    />
+                  </label>
+                  <label>
+                    Retrospective — What Went Wrong
+                    <textarea
+                      rows={4}
+                      value={blogDraft.wentWrongText}
+                      onChange={(e) =>
+                        setBlogDraft((prev) => ({ ...prev, wentWrongText: e.target.value }))
+                      }
+                      placeholder="One bullet per line."
+                    />
+                  </label>
+                  <label>
+                    Retrospective — Moving Forward
+                    <textarea
+                      rows={4}
+                      value={blogDraft.improvementsText}
+                      onChange={(e) =>
+                        setBlogDraft((prev) => ({ ...prev, improvementsText: e.target.value }))
+                      }
+                      placeholder="One bullet per line."
+                    />
+                  </label>
+                </div>
+                <div className="project-list-actions">
+                  <button type="button" className="btn btn-primary btn-small" onClick={saveBlogDraft}>
+                    {editingBlogSlug ? "Update Post" : "Publish Post"}
+                  </button>
+                  <button type="button" className="btn btn-ghost btn-small" onClick={cancelBlogForm}>
+                    Cancel
+                  </button>
+                </div>
+              </article>
+            ) : null}
+
+            {blogStatus ? <p className="muted">{blogStatus}</p> : null}
           </section>
 
           <section className="panel">
